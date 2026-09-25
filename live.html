@@ -7,15 +7,13 @@
 <title>Gold AI Advisor</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
     font-family:Arial,sans-serif;
     background:#080b12;
-    color:white;
+    color:#fff;
 }
 
 header{
@@ -37,8 +35,8 @@ header{
 }
 
 .status{
-    color:#59d98e;
     font-size:13px;
+    color:#f5c542;
 }
 
 .container{
@@ -95,6 +93,7 @@ header{
 }
 
 canvas{
+    display:block;
     width:100%;
     height:330px;
     background:#090d14;
@@ -142,7 +141,7 @@ input{
     border-radius:10px;
     border:1px solid #2b3445;
     background:#080c13;
-    color:white;
+    color:#fff;
     outline:none;
     font-size:15px;
 }
@@ -155,10 +154,6 @@ button{
     color:#111;
     font-weight:bold;
     cursor:pointer;
-}
-
-button:hover{
-    opacity:.9;
 }
 
 button:disabled{
@@ -198,7 +193,6 @@ button:disabled{
 }
 
 @media(max-width:900px){
-
     .grid{
         grid-template-columns:1fr;
     }
@@ -228,20 +222,11 @@ button:disabled{
 
 </header>
 
-
 <div class="container">
 
 <div class="grid">
 
-
-<!-- ========================= -->
-<!-- COLUMNA PRINCIPAL -->
-<!-- ========================= -->
-
 <div>
-
-
-<!-- PRECIO -->
 
 <div class="card">
 
@@ -282,11 +267,7 @@ Conectando con NinjaTrader...
 
 </div>
 
-
 <br>
-
-
-<!-- CHART -->
 
 <div class="card">
 
@@ -296,11 +277,7 @@ Conectando con NinjaTrader...
 
 </div>
 
-
 <br>
-
-
-<!-- IA -->
 
 <div class="card chat">
 
@@ -310,39 +287,29 @@ Conectando con NinjaTrader...
 IA especializada en oro, macroeconomía, mercados y noticias.
 </div>
 
-
 <div class="messages" id="messages">
 
 <div class="message ai">
-
 Hola. Soy Gold AI.
 
 Estoy conectado a los datos de GC de NinjaTrader.
 
-Puedes preguntarme:
-
-• ¿Qué está pasando con el oro?
-• ¿Por qué está subiendo?
-• ¿Por qué está cayendo?
-• ¿Qué efecto tiene el DXY?
-• ¿Qué dijo la Fed?
-• ¿Cómo afecta Trump al oro?
-• ¿Qué noticias están moviendo el mercado?
-
+Pregúntame qué está pasando con el oro, las noticias,
+la Fed, el DXY, los bonos o cualquier factor que pueda
+afectar al mercado.
 </div>
 
 </div>
-
 
 <div class="input-area">
 
 <input
 id="question"
-placeholder="Pregúntame sobre el oro..."
+placeholder="¿Qué está pasando con el oro ahora?"
 autocomplete="off"
 />
 
-<button id="sendButton" onclick="askAI()">
+<button id="sendButton">
 ENVIAR
 </button>
 
@@ -353,14 +320,7 @@ ENVIAR
 </div>
 
 
-<!-- ========================= -->
-<!-- COLUMNA DERECHA -->
-<!-- ========================= -->
-
 <div>
-
-
-<!-- SIGNAL -->
 
 <div class="card signal">
 
@@ -376,11 +336,7 @@ Señal técnica básica basada en el movimiento reciente de GC.
 
 </div>
 
-
 <br>
-
-
-<!-- MACRO -->
 
 <div class="card">
 
@@ -413,11 +369,7 @@ Señal técnica básica basada en el movimiento reciente de GC.
 
 </div>
 
-
 <br>
-
-
-<!-- PORTFOLIO -->
 
 <div class="card">
 
@@ -445,7 +397,6 @@ Señal técnica básica basada en el movimiento reciente de GC.
 
 </div>
 
-
 </div>
 
 </div>
@@ -455,24 +406,18 @@ Señal técnica básica basada en el movimiento reciente de GC.
 
 <script>
 
-/*
-====================================================
-CONEXIONES
-====================================================
-
-NinjaTrader:
-8787
-
-Gold AI:
-8791
-
-NO CAMBIAR ESTOS PUERTOS
-*/
+/* ==========================================
+   CONEXIONES
+   ========================================== */
 
 const GC_URL = "http://localhost:8787/gc";
 
-const AI_URL = "http://localhost:8791/ai";
+const AI_URL = "http://localhost:8792/ai";
 
+
+/* ==========================================
+   VARIABLES
+   ========================================== */
 
 let currentMarket = null;
 
@@ -481,11 +426,9 @@ let prices = [];
 const maxPrices = 100;
 
 
-/*
-====================================================
-ACTUALIZAR MERCADO
-====================================================
-*/
+/* ==========================================
+   ACTUALIZAR MERCADO
+   ========================================== */
 
 async function updateMarket(){
 
@@ -496,9 +439,11 @@ async function updateMarket(){
         );
 
         if(!response.ok){
+
             throw new Error(
-                "NinjaTrader respondió " + response.status
+                "HTTP " + response.status
             );
+
         }
 
         const data = await response.json();
@@ -532,16 +477,13 @@ async function updateMarket(){
             document.getElementById("price").innerText =
                 price.toFixed(1);
 
-
             prices.push(price);
-
 
             if(prices.length > maxPrices){
 
                 prices.shift();
 
             }
-
 
             drawChart();
 
@@ -577,20 +519,20 @@ async function updateMarket(){
         document.getElementById("priceText").innerText =
             "Datos en vivo desde NinjaTrader";
 
-
     }
 
     catch(error){
 
-        console.error(error);
-
+        console.error(
+            "NinjaTrader:",
+            error
+        );
 
         document.getElementById("status").innerText =
             "● NinjaTrader desconectado";
 
         document.getElementById("status").style.color =
             "#ff6464";
-
 
         document.getElementById("connection").innerText =
             "🔴 No se puede conectar con localhost:8787";
@@ -600,11 +542,9 @@ async function updateMarket(){
 }
 
 
-/*
-====================================================
-GRAFICO
-====================================================
-*/
+/* ==========================================
+   GRAFICO
+   ========================================== */
 
 function drawChart(){
 
@@ -620,6 +560,13 @@ function drawChart(){
 
     const height =
         canvas.clientHeight;
+
+
+    if(width <= 0 || height <= 0){
+
+        return;
+
+    }
 
 
     const ratio =
@@ -717,11 +664,9 @@ function drawChart(){
 }
 
 
-/*
-====================================================
-SEÑAL BASICA
-====================================================
-*/
+/* ==========================================
+   SEÑAL
+   ========================================== */
 
 function calculateSignal(){
 
@@ -735,19 +680,22 @@ function calculateSignal(){
     const recent =
         prices.slice(-5);
 
-
     const previous =
         prices.slice(-10,-5);
 
 
     const recentAverage =
-        recent.reduce((a,b)=>a+b,0)
-        / recent.length;
+        recent.reduce(
+            (a,b)=>a+b,
+            0
+        ) / recent.length;
 
 
     const previousAverage =
-        previous.reduce((a,b)=>a+b,0)
-        / previous.length;
+        previous.reduce(
+            (a,b)=>a+b,
+            0
+        ) / previous.length;
 
 
     let signal =
@@ -775,11 +723,9 @@ function calculateSignal(){
 }
 
 
-/*
-====================================================
-AGREGAR MENSAJE
-====================================================
-*/
+/* ==========================================
+   MENSAJE
+   ========================================== */
 
 function addMessage(type,text){
 
@@ -799,7 +745,9 @@ function addMessage(type,text){
         text;
 
 
-    messages.appendChild(message);
+    messages.appendChild(
+        message
+    );
 
 
     messages.scrollTop =
@@ -811,17 +759,14 @@ function addMessage(type,text){
 }
 
 
-/*
-====================================================
-PREGUNTAR A GOLD AI
-====================================================
-*/
+/* ==========================================
+   GOLD AI
+   ========================================== */
 
 async function askAI(){
 
     const input =
         document.getElementById("question");
-
 
     const button =
         document.getElementById("sendButton");
@@ -838,10 +783,6 @@ async function askAI(){
     }
 
 
-    /*
-    MENSAJE DEL USUARIO
-    */
-
     addMessage(
         "user",
         question
@@ -851,10 +792,6 @@ async function askAI(){
     input.value = "";
 
 
-    /*
-    BLOQUEAR BOTON
-    */
-
     button.disabled =
         true;
 
@@ -862,23 +799,14 @@ async function askAI(){
         "ANALIZANDO...";
 
 
-    /*
-    MENSAJE IA
-    */
-
     const aiMessage =
         addMessage(
             "ai",
-            "🧠 Gold AI está analizando el mercado..."
+            "🧠 Gold AI está analizando..."
         );
 
 
     try{
-
-
-        /*
-        DATOS DE NINJATRADER
-        */
 
         const market = {
 
@@ -887,19 +815,19 @@ async function askAI(){
                 "GC DEC26",
 
             last:
-                currentMarket?.last ||
+                currentMarket?.last ??
                 null,
 
             bid:
-                currentMarket?.bid ||
+                currentMarket?.bid ??
                 null,
 
             ask:
-                currentMarket?.ask ||
+                currentMarket?.ask ??
                 null,
 
             volume:
-                currentMarket?.volume ||
+                currentMarket?.volume ??
                 null,
 
             recentPrices:
@@ -908,9 +836,11 @@ async function askAI(){
         };
 
 
-        /*
-        ENVIAR A LA IA
-        */
+        console.log(
+            "Enviando a Gold AI:",
+            market
+        );
+
 
         const response =
             await fetch(
@@ -941,10 +871,6 @@ async function askAI(){
             );
 
 
-        /*
-        RESPUESTA
-        */
-
         const result =
             await response.json();
 
@@ -953,40 +879,45 @@ async function askAI(){
 
             throw new Error(
                 result.error ||
-                "Error del servidor Gold AI"
+                "Servidor Gold AI respondió HTTP " +
+                response.status
             );
 
         }
 
 
-        /*
-        MOSTRAR RESPUESTA
-        */
+        if(!result.answer){
+
+            throw new Error(
+                "Gold AI no devolvió texto."
+            );
+
+        }
+
 
         aiMessage.innerText =
-            result.answer ||
-            "Gold AI no devolvió una respuesta.";
+            result.answer;
 
 
     }
 
     catch(error){
 
-        console.error(error);
+        console.error(
+            "Gold AI:",
+            error
+        );
 
 
         aiMessage.innerText =
-            "❌ Error conectando con Gold AI.\n\n" +
+            "❌ GOLD AI ERROR\n\n" +
             error.message +
             "\n\n" +
-            "Comprueba que el servidor 8791 esté abierto.";
+            "Comprueba que el servidor Gold AI " +
+            "esté ejecutándose en el puerto 8792.";
 
     }
 
-
-    /*
-    DESBLOQUEAR
-    */
 
     button.disabled =
         false;
@@ -995,21 +926,15 @@ async function askAI(){
         "ENVIAR";
 
 
-    const messages =
-        document.getElementById("messages");
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
+    document.getElementById("messages").scrollTop =
+        document.getElementById("messages").scrollHeight;
 
 }
 
 
-/*
-====================================================
-ENTER PARA ENVIAR
-====================================================
-*/
+/* ==========================================
+   ENTER
+   ========================================== */
 
 document
 .getElementById("question")
@@ -1029,20 +954,28 @@ document
 );
 
 
-/*
-====================================================
-INICIAR
-====================================================
-*/
+/* ==========================================
+   BOTON
+   ========================================== */
+
+document
+.getElementById("sendButton")
+.addEventListener(
+    "click",
+    askAI
+);
+
+
+/* ==========================================
+   INICIO
+   ========================================== */
 
 updateMarket();
-
 
 setInterval(
     updateMarket,
     1000
 );
-
 
 window.addEventListener(
     "resize",
