@@ -1,1 +1,842 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold AI Trader — Live</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    background:#080b12;
+    color:#e8edf7;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+header{
+    height:70px;
+    background:#0d111a;
+    border-bottom:1px solid #202838;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#d9a441;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    background:#22c55e;
+    border-radius:50%;
+}
+
+.container{
+    padding:25px;
+    max-width:1500px;
+    margin:auto;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#0d111a;
+    border:1px solid #202838;
+    border-radius:12px;
+    padding:20px;
+}
+
+.label{
+    color:#7f8ba3;
+    font-size:12px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+}
+
+.value{
+    font-size:28px;
+    font-weight:bold;
+}
+
+.gold{
+    color:#d9a441;
+}
+
+.green{
+    color:#22c55e;
+}
+
+.red{
+    color:#ef4444;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:#0d111a;
+    border:1px solid #202838;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.panel h2{
+    font-size:16px;
+    margin-bottom:18px;
+}
+
+.chart-container{
+    height:420px;
+}
+
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:15px;
+}
+
+.metric{
+    background:#111722;
+    padding:13px;
+    border-radius:8px;
+}
+
+.metric span{
+    display:block;
+    color:#7f8ba3;
+    font-size:11px;
+    margin-bottom:5px;
+}
+
+.metric strong{
+    font-size:16px;
+}
+
+.engine{
+    text-align:center;
+    padding:25px;
+    background:#111722;
+    border-radius:10px;
+}
+
+.signal{
+    font-size:34px;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+.confidence{
+    color:#8d99ad;
+}
+
+.trade-box{
+    display:grid;
+    gap:12px;
+}
+
+input{
+    width:100%;
+    background:#080b12;
+    color:white;
+    border:1px solid #293246;
+    border-radius:7px;
+    padding:11px;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+button{
+    border:none;
+    border-radius:7px;
+    padding:12px;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.long{
+    background:#15803d;
+}
+
+.short{
+    background:#b91c1c;
+}
+
+.close{
+    background:#374151;
+    width:100%;
+}
+
+.info{
+    color:#7f8ba3;
+    font-size:12px;
+    line-height:1.6;
+}
+
+.news{
+    display:grid;
+    gap:10px;
+}
+
+.news-item{
+    padding:12px;
+    background:#111722;
+    border-radius:8px;
+}
+
+footer{
+    text-align:center;
+    color:#657087;
+    font-size:11px;
+    padding:20px;
+}
+
+@media(max-width:900px){
+    .cards{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+    .cards{
+        grid-template-columns:1fr;
+    }
+
+    .metrics{
+        grid-template-columns:1fr 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">GOLD <span>AI</span> TRADER</div>
+
+    <div class="status">
+        <div class="dot" id="statusDot"></div>
+        <span id="connectionStatus">CONNECTING...</span>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="label">GC DEC26 — LIVE</div>
+            <div class="value gold" id="goldPrice">---</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Bid</div>
+            <div class="value" id="bid">---</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Ask</div>
+            <div class="value" id="ask">---</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Volume</div>
+            <div class="value" id="volume">---</div>
+        </div>
+
+    </div>
+
+    <div class="grid">
+
+        <div>
+
+            <div class="panel">
+
+                <h2>GC DEC26 — NinjaTrader Live Feed</h2>
+
+                <div class="chart-container">
+                    <canvas id="goldChart"></canvas>
+                </div>
+
+                <div class="metrics">
+
+                    <div class="metric">
+                        <span>LAST</span>
+                        <strong id="metricLast">---</strong>
+                    </div>
+
+                    <div class="metric">
+                        <span>BID</span>
+                        <strong id="metricBid">---</strong>
+                    </div>
+
+                    <div class="metric">
+                        <span>ASK</span>
+                        <strong id="metricAsk">---</strong>
+                    </div>
+
+                    <div class="metric">
+                        <span>UPDATE</span>
+                        <strong id="metricTime">---</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <h2>AI Market Engine</h2>
+
+                <div class="engine">
+
+                    <div class="label">CURRENT MODEL SIGNAL</div>
+
+                    <div class="signal" id="signal">
+                        WAIT
+                    </div>
+
+                    <div class="confidence" id="confidence">
+                        Esperando suficientes datos...
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <div class="panel">
+
+                <h2>Trade Simulator</h2>
+
+                <div class="trade-box">
+
+                    <div>
+                        <div class="label">Contracts</div>
+                        <input id="contracts" type="number" value="2" min="1">
+                    </div>
+
+                    <div>
+                        <div class="label">Stop Loss — puntos</div>
+                        <input id="sl" type="number" value="5" step="0.1">
+                    </div>
+
+                    <div>
+                        <div class="label">Take Profit — puntos</div>
+                        <input id="tp" type="number" value="10" step="0.1">
+                    </div>
+
+                    <div class="buttons">
+                        <button class="long" onclick="openTrade('LONG')">
+                            LONG
+                        </button>
+
+                        <button class="short" onclick="openTrade('SHORT')">
+                            SHORT
+                        </button>
+                    </div>
+
+                    <button class="close" onclick="closeTrade()">
+                        CLOSE POSITION
+                    </button>
+
+                    <div class="info" id="position">
+                        No hay posición abierta.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <h2>Connection</h2>
+
+                <div class="info">
+
+                    <p><b>Source:</b> NinjaTrader</p>
+                    <p><b>Instrument:</b> GC DEC26</p>
+                    <p><b>Bridge:</b> localhost:8787</p>
+                    <p><b>Endpoint:</b> /gc</p>
+
+                    <br>
+
+                    <p>
+                        El precio mostrado aquí proviene del archivo
+                        generado por NinjaTrader.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="panel">
+
+                <h2>Market Intelligence</h2>
+
+                <div class="news">
+
+                    <div class="news-item">
+                        🟡 GC conectado a NinjaTrader
+                    </div>
+
+                    <div class="news-item">
+                        🧠 Motor AI preparado
+                    </div>
+
+                    <div class="news-item">
+                        📊 Datos reales recibidos
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    Gold AI Trader — Simulation & Market Intelligence
+</footer>
+
+
+<script>
+
+const API = "http://localhost:8787/gc";
+
+let prices = [];
+let currentPrice = null;
+let position = null;
+
+
+/* =========================
+   CHART
+========================= */
+
+const ctx = document.getElementById("goldChart");
+
+const chart = new Chart(ctx, {
+
+    type:"line",
+
+    data:{
+        labels:[],
+        datasets:[{
+            label:"GC DEC26",
+            data:[],
+            borderWidth:2,
+            tension:0.25,
+            pointRadius:0
+        }]
+    },
+
+    options:{
+        responsive:true,
+        maintainAspectRatio:false,
+
+        scales:{
+            x:{
+                ticks:{
+                    color:"#7f8ba3"
+                },
+                grid:{
+                    color:"#202838"
+                }
+            },
+
+            y:{
+                ticks:{
+                    color:"#7f8ba3"
+                },
+                grid:{
+                    color:"#202838"
+                }
+            }
+        },
+
+        plugins:{
+            legend:{
+                labels:{
+                    color:"#e8edf7"
+                }
+            }
+        }
+    }
+
+});
+
+
+/* =========================
+   GET LIVE DATA
+========================= */
+
+async function updateMarket(){
+
+    try{
+
+        const response = await fetch(
+            API + "?t=" + Date.now()
+        );
+
+        if(!response.ok){
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        currentPrice = Number(data.last);
+
+        document.getElementById("goldPrice").textContent =
+            currentPrice.toFixed(1);
+
+        document.getElementById("bid").textContent =
+            Number(data.bid).toFixed(1);
+
+        document.getElementById("ask").textContent =
+            Number(data.ask).toFixed(1);
+
+        document.getElementById("volume").textContent =
+            Number(data.volume).toLocaleString();
+
+        document.getElementById("metricLast").textContent =
+            currentPrice.toFixed(1);
+
+        document.getElementById("metricBid").textContent =
+            Number(data.bid).toFixed(1);
+
+        document.getElementById("metricAsk").textContent =
+            Number(data.ask).toFixed(1);
+
+        const time = new Date(data.timestamp);
+
+        document.getElementById("metricTime").textContent =
+            time.toLocaleTimeString();
+
+        document.getElementById("connectionStatus").textContent =
+            "NINJATRADER LIVE";
+
+        document.getElementById("statusDot").style.background =
+            "#22c55e";
+
+
+        /* chart */
+
+        const now = new Date().toLocaleTimeString();
+
+        prices.push(currentPrice);
+
+        if(prices.length > 100){
+            prices.shift();
+        }
+
+        chart.data.labels.push(now);
+
+        if(chart.data.labels.length > 100){
+            chart.data.labels.shift();
+        }
+
+        chart.data.datasets[0].data = prices;
+
+        chart.update("none");
+
+
+        /* AI */
+
+        calculateSignal();
+
+
+        /* position */
+
+        updatePosition();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        document.getElementById("connectionStatus").textContent =
+            "OFFLINE";
+
+        document.getElementById("statusDot").style.background =
+            "#ef4444";
+
+    }
+
+}
+
+
+/* =========================
+   SIMPLE AI ENGINE
+========================= */
+
+function calculateSignal(){
+
+    if(prices.length < 10){
+
+        document.getElementById("signal").textContent =
+            "WAIT";
+
+        document.getElementById("confidence").textContent =
+            "Recopilando datos del mercado...";
+
+        return;
+    }
+
+    const recent =
+        prices.slice(-10);
+
+    const average =
+        recent.reduce((a,b)=>a+b,0) / recent.length;
+
+    const last =
+        prices[prices.length-1];
+
+    const difference =
+        last - average;
+
+    let signal;
+    let confidence;
+
+    if(difference > 1){
+
+        signal = "LONG";
+        confidence =
+            "Momentum alcista detectado en el feed.";
+
+    }
+
+    else if(difference < -1){
+
+        signal = "SHORT";
+        confidence =
+            "Momentum bajista detectado en el feed.";
+
+    }
+
+    else{
+
+        signal = "WAIT";
+        confidence =
+            "Movimiento insuficiente para una señal.";
+
+    }
+
+    const element =
+        document.getElementById("signal");
+
+    element.textContent =
+        signal;
+
+    element.className =
+        "signal " +
+        (signal === "LONG"
+            ? "green"
+            : signal === "SHORT"
+                ? "red"
+                : "");
+
+    document.getElementById("confidence").textContent =
+        confidence;
+
+}
+
+
+/* =========================
+   SIMULATED TRADING
+========================= */
+
+function openTrade(side){
+
+    if(currentPrice === null){
+
+        alert("Esperando precio de NinjaTrader.");
+
+        return;
+    }
+
+    const contracts =
+        Number(document.getElementById("contracts").value);
+
+    const sl =
+        Number(document.getElementById("sl").value);
+
+    const tp =
+        Number(document.getElementById("tp").value);
+
+    position = {
+
+        side:side,
+
+        entry:currentPrice,
+
+        contracts:contracts,
+
+        sl:sl,
+
+        tp:tp
+
+    };
+
+    updatePosition();
+
+}
+
+
+function closeTrade(){
+
+    if(!position){
+
+        return;
+    }
+
+    const pnl =
+        calculatePnL();
+
+    alert(
+        "Posición cerrada\n\n" +
+        "Resultado simulado: $" +
+        pnl.toFixed(2)
+    );
+
+    position = null;
+
+    updatePosition();
+
+}
+
+
+function calculatePnL(){
+
+    if(!position || currentPrice === null){
+
+        return 0;
+    }
+
+    const difference =
+        position.side === "LONG"
+            ? currentPrice - position.entry
+            : position.entry - currentPrice;
+
+    /*
+       GC = $100 por cada $1.00
+       por contrato
+    */
+
+    return difference *
+           100 *
+           position.contracts;
+
+}
+
+
+function updatePosition(){
+
+    const element =
+        document.getElementById("position");
+
+    if(!position){
+
+        element.innerHTML =
+            "No hay posición abierta.";
+
+        return;
+    }
+
+    const pnl =
+        calculatePnL();
+
+    const color =
+        pnl >= 0
+            ? "#22c55e"
+            : "#ef4444";
+
+    element.innerHTML =
+
+        "<b>" +
+        position.side +
+        "</b><br>" +
+
+        "Entrada: " +
+        position.entry.toFixed(1) +
+        "<br>" +
+
+        "Contratos: " +
+        position.contracts +
+        "<br>" +
+
+        "P&L simulado: " +
+
+        "<span style='color:" +
+        color +
+        "'>$" +
+
+        pnl.toFixed(2) +
+
+        "</span>";
+
+}
+
+
+/* =========================
+   LOOP
+========================= */
+
+updateMarket();
+
+setInterval(
+    updateMarket,
+    1000
+);
+
+</script>
+
+</body>
+</html>
