@@ -4,25 +4,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Gold AI Advisor</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
     margin:0;
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Arial,sans-serif;
     background:#080b12;
-    color:#f5f5f5;
+    color:white;
 }
 
 header{
     padding:18px 25px;
-    border-bottom:1px solid #222938;
     background:#0d111a;
+    border-bottom:1px solid #222938;
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -38,8 +35,8 @@ header{
 }
 
 .status{
-    font-size:13px;
     color:#59d98e;
+    font-size:13px;
 }
 
 .container{
@@ -59,36 +56,22 @@ header{
     border:1px solid #202736;
     border-radius:14px;
     padding:20px;
-    box-shadow:0 8px 30px rgba(0,0,0,.2);
 }
 
-.price-card{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+.price{
+    font-size:44px;
+    font-weight:bold;
+    margin:8px 0;
 }
 
 .symbol{
     color:#929aaa;
-    font-size:14px;
-}
-
-.price{
-    font-size:42px;
-    font-weight:bold;
-    margin-top:5px;
-}
-
-.change{
-    font-size:16px;
-    color:#59d98e;
 }
 
 .metrics{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:12px;
+    gap:10px;
     margin-top:20px;
 }
 
@@ -99,18 +82,14 @@ header{
 }
 
 .metric-title{
-    color:#8d95a6;
+    color:#8992a3;
     font-size:12px;
 }
 
 .metric-value{
-    margin-top:5px;
     font-size:18px;
     font-weight:bold;
-}
-
-h2{
-    margin-top:0;
+    margin-top:5px;
 }
 
 canvas{
@@ -121,7 +100,7 @@ canvas{
 }
 
 .chat{
-    height:550px;
+    height:570px;
     display:flex;
     flex-direction:column;
 }
@@ -129,13 +108,13 @@ canvas{
 .messages{
     flex:1;
     overflow-y:auto;
-    padding:10px 0;
+    margin:15px 0;
 }
 
 .message{
-    padding:12px 14px;
-    margin-bottom:10px;
+    padding:13px;
     border-radius:10px;
+    margin-bottom:10px;
     line-height:1.5;
     white-space:pre-wrap;
 }
@@ -152,12 +131,11 @@ canvas{
 .input-area{
     display:flex;
     gap:10px;
-    margin-top:10px;
 }
 
 input{
     flex:1;
-    padding:14px;
+    padding:15px;
     border-radius:10px;
     border:1px solid #2b3445;
     background:#080c13;
@@ -166,8 +144,8 @@ input{
 }
 
 button{
-    padding:14px 20px;
-    border:none;
+    padding:15px 22px;
+    border:0;
     border-radius:10px;
     background:#f5c542;
     color:#111;
@@ -175,48 +153,23 @@ button{
     cursor:pointer;
 }
 
-button:hover{
-    opacity:.9;
-}
-
 .signal{
     text-align:center;
-    padding:25px;
 }
 
 .signal-value{
     font-size:30px;
     font-weight:bold;
-    margin:15px 0;
+    margin:20px 0;
 }
 
-.neutral{
-    color:#f5c542;
-}
-
-.macro{
-    display:grid;
-    gap:10px;
-}
-
-.macro-item{
-    display:flex;
-    justify-content:space-between;
-    padding:12px;
-    background:#080c13;
-    border-radius:8px;
-}
-
-.portfolio{
-    display:grid;
-    gap:10px;
-}
-
+.macro-item,
 .portfolio-item{
     display:flex;
     justify-content:space-between;
-    padding:12px;
     background:#080c13;
+    padding:13px;
+    margin-bottom:8px;
     border-radius:8px;
 }
 
@@ -233,10 +186,6 @@ button:hover{
     .metrics{
         grid-template-columns:1fr;
     }
-
-    .price{
-        font-size:32px;
-    }
 }
 </style>
 </head>
@@ -245,491 +194,361 @@ button:hover{
 
 <header>
 
-    <div class="logo">
-        🟡 GOLD <span>AI ADVISOR</span>
-    </div>
+<div class="logo">
+🟡 GOLD <span>AI ADVISOR</span>
+</div>
 
-    <div class="status" id="connectionStatus">
-        ● Conectando...
-    </div>
+<div class="status" id="status">
+● Conectando...
+</div>
 
 </header>
 
 
 <div class="container">
 
-    <div class="grid">
+<div class="grid">
 
-        <!-- COLUMNA PRINCIPAL -->
+<div>
 
-        <div>
+<!-- PRECIO -->
 
-            <div class="card price-card">
+<div class="card">
 
-                <div>
+<div class="symbol" id="symbol">
+GC DEC26
+</div>
 
-                    <div class="symbol" id="symbol">
-                        GC DEC26
-                    </div>
+<div class="price" id="price">
+----
+</div>
 
-                    <div class="price" id="price">
-                        ----
-                    </div>
+<div id="priceText">
+Esperando NinjaTrader...
+</div>
 
-                    <div class="change" id="priceStatus">
-                        Esperando NinjaTrader...
-                    </div>
+<div class="metrics">
 
-                </div>
+<div class="metric">
+<div class="metric-title">BID</div>
+<div class="metric-value" id="bid">----</div>
+</div>
 
-            </div>
+<div class="metric">
+<div class="metric-title">ASK</div>
+<div class="metric-value" id="ask">----</div>
+</div>
 
+<div class="metric">
+<div class="metric-title">VOLUMEN</div>
+<div class="metric-value" id="volume">----</div>
+</div>
 
-            <div class="card">
+</div>
 
-                <h2>Gold Futures</h2>
+</div>
 
-                <canvas id="chart"></canvas>
+<br>
 
-                <div class="metrics">
 
-                    <div class="metric">
+<!-- GRAFICO -->
 
-                        <div class="metric-title">
-                            BID
-                        </div>
+<div class="card">
 
-                        <div class="metric-value" id="bid">
-                            ----
-                        </div>
+<h2>Gold Futures</h2>
 
-                    </div>
+<canvas id="chart"></canvas>
 
+</div>
 
-                    <div class="metric">
+<br>
 
-                        <div class="metric-title">
-                            ASK
-                        </div>
 
-                        <div class="metric-value" id="ask">
-                            ----
-                        </div>
+<!-- CHAT -->
 
-                    </div>
+<div class="card chat">
 
+<h2>🤖 Gold AI</h2>
 
-                    <div class="metric">
+<div class="small">
+Analista especializado en oro, macroeconomía y noticias.
+</div>
 
-                        <div class="metric-title">
-                            VOLUMEN
-                        </div>
+<div class="messages" id="messages">
 
-                        <div class="metric-value" id="volume">
-                            ----
-                        </div>
+<div class="message ai">
+Hola. Soy Gold AI.
 
-                    </div>
+Estoy conectado a los datos de GC de NinjaTrader.
 
-                </div>
+Pregúntame qué está pasando con el oro.
+</div>
 
-            </div>
+</div>
 
+<div class="input-area">
 
-            <br>
+<input
+id="question"
+placeholder="¿Qué está pasando con el oro ahora?"
+>
 
+<button onclick="askAI()">
+ENVIAR
+</button>
 
-            <div class="card chat">
+</div>
 
-                <h2>🤖 Gold AI</h2>
+</div>
 
-                <div class="small">
-                    Pregunta sobre el oro, noticias, Fed, Trump, DXY,
-                    inflación, petróleo, China o el mercado.
-                </div>
+</div>
 
-                <div class="messages" id="messages">
 
-                    <div class="message ai">
-                        Hola. Soy Gold AI Advisor.
+<!-- DERECHA -->
 
-                        Estoy conectado a los datos de GC de NinjaTrader.
+<div>
 
-                        Pregúntame qué está pasando con el oro.
-                    </div>
+<div class="card signal">
 
-                </div>
+<h2>Gold AI Signal</h2>
 
+<div class="signal-value" id="signal">
+ESPERANDO
+</div>
 
-                <div class="input-area">
+<div class="small">
+Señal basada en el movimiento reciente de GC.
+</div>
 
-                    <input
-                        id="question"
-                        type="text"
-                        placeholder="¿Qué está pasando con el oro ahora?"
-                    >
+</div>
 
-                    <button onclick="askAI()">
-                        ENVIAR
-                    </button>
+<br>
 
-                </div>
 
-            </div>
+<div class="card">
 
-        </div>
+<h2>Macro</h2>
 
+<div class="macro-item">
+<span>DXY</span>
+<span>IA analizará</span>
+</div>
 
-        <!-- COLUMNA DERECHA -->
+<div class="macro-item">
+<span>US10Y</span>
+<span>IA analizará</span>
+</div>
 
-        <div>
+<div class="macro-item">
+<span>FED</span>
+<span>IA analizará</span>
+</div>
 
-            <div class="card signal">
+<div class="macro-item">
+<span>Petróleo</span>
+<span>IA analizará</span>
+</div>
 
-                <h2>Gold AI Signal</h2>
+</div>
 
-                <div
-                    class="signal-value neutral"
-                    id="signal"
-                >
-                    ESPERANDO
-                </div>
+<br>
 
-                <div class="small">
-                    El sistema analizará precio,
-                    momentum y contexto macro.
-                </div>
 
-            </div>
+<div class="card">
 
+<h2>Cuenta simulada</h2>
 
-            <br>
+<div class="portfolio-item">
+<span>Capital</span>
+<span>$150,000</span>
+</div>
 
+<div class="portfolio-item">
+<span>Posición</span>
+<span>0 GC</span>
+</div>
 
-            <div class="card">
+<div class="portfolio-item">
+<span>P&L</span>
+<span>$0</span>
+</div>
 
-                <h2>Mercado</h2>
+<div class="portfolio-item">
+<span>Estado</span>
+<span>SIMULACIÓN</span>
+</div>
 
-                <div class="macro">
+</div>
 
-                    <div class="macro-item">
+</div>
 
-                        <span>DXY</span>
-
-                        <span id="dxy">
-                            --
-                        </span>
-
-                    </div>
-
-
-                    <div class="macro-item">
-
-                        <span>US10Y</span>
-
-                        <span id="us10y">
-                            --
-                        </span>
-
-                    </div>
-
-
-                    <div class="macro-item">
-
-                        <span>FED</span>
-
-                        <span id="fed">
-                            --
-                        </span>
-
-                    </div>
-
-
-                    <div class="macro-item">
-
-                        <span>OIL</span>
-
-                        <span id="oil">
-                            --
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <br>
-
-                <div class="small">
-                    Los datos macro se incorporarán
-                    mediante búsqueda web de Gold AI.
-                </div>
-
-            </div>
-
-
-            <br>
-
-
-            <div class="card">
-
-                <h2>Cuenta simulada</h2>
-
-                <div class="portfolio">
-
-                    <div class="portfolio-item">
-
-                        <span>Capital</span>
-
-                        <span>
-                            $150,000
-                        </span>
-
-                    </div>
-
-
-                    <div class="portfolio-item">
-
-                        <span>Posición</span>
-
-                        <span id="position">
-                            0 GC
-                        </span>
-
-                    </div>
-
-
-                    <div class="portfolio-item">
-
-                        <span>P&L</span>
-
-                        <span id="pnl">
-                            $0
-                        </span>
-
-                    </div>
-
-
-                    <div class="portfolio-item">
-
-                        <span>Estado</span>
-
-                        <span>
-                            SIMULACIÓN
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </div>
 
 
 <script>
 
-/*
-====================================================
- GOLD AI ADVISOR
- CONEXIONES
-====================================================
-*/
+/* =========================================
+   CONEXIONES
+========================================= */
 
-// NinjaTrader / puente de mercado
-const GC_URL = "http://localhost:8787/gc";
+const GC_URL =
+"http://localhost:8787/gc";
 
-// Gold AI / OpenAI
-const AI_URL = "http://localhost:8788/ai";
+const AI_URL =
+"http://localhost:8790/ai";
 
 
-/*
-====================================================
- VARIABLES
-====================================================
-*/
+/* =========================================
+   VARIABLES
+========================================= */
 
 let currentMarket = null;
 
-let priceHistory = [];
+let prices = [];
 
-const maxPoints = 80;
+const maxPrices = 100;
 
 
-/*
-====================================================
- OBTENER GC DESDE NINJATRADER
-====================================================
-*/
+/* =========================================
+   NINJATRADER
+========================================= */
 
 async function updateMarket(){
 
     try{
 
-        const response = await fetch(
+        const response =
+        await fetch(
             GC_URL + "?t=" + Date.now()
         );
 
-        if(!response.ok){
-
-            throw new Error(
-                "GC HTTP " + response.status
-            );
-
-        }
-
-        const data = await response.json();
+        const data =
+        await response.json();
 
         currentMarket = data;
 
-        updateInterface(data);
+        document.getElementById("status")
+        .innerText =
+        "● NinjaTrader conectado";
 
-        document.getElementById(
-            "connectionStatus"
-        ).innerText = "● NinjaTrader conectado";
+        document.getElementById("status")
+        .style.color =
+        "#59d98e";
 
-        document.getElementById(
-            "connectionStatus"
-        ).style.color = "#59d98e";
+
+        if(data.symbol){
+
+            document.getElementById("symbol")
+            .innerText =
+            data.symbol;
+
+        }
+
+
+        if(data.last !== undefined){
+
+            const price =
+            Number(data.last);
+
+            document.getElementById("price")
+            .innerText =
+            price.toFixed(1);
+
+            prices.push(price);
+
+            if(prices.length > maxPrices){
+
+                prices.shift();
+
+            }
+
+            drawChart();
+
+            calculateSignal();
+
+        }
+
+
+        if(data.bid !== undefined){
+
+            document.getElementById("bid")
+            .innerText =
+            Number(data.bid).toFixed(1);
+
+        }
+
+
+        if(data.ask !== undefined){
+
+            document.getElementById("ask")
+            .innerText =
+            Number(data.ask).toFixed(1);
+
+        }
+
+
+        if(data.volume !== undefined){
+
+            document.getElementById("volume")
+            .innerText =
+            Number(data.volume).toLocaleString();
+
+        }
+
+
+        document.getElementById("priceText")
+        .innerText =
+        "Datos en vivo desde NinjaTrader";
 
     }
 
     catch(error){
 
-        console.error(
-            "Error GC:",
-            error
-        );
+        console.error(error);
 
-        document.getElementById(
-            "connectionStatus"
-        ).innerText = "● NinjaTrader desconectado";
+        document.getElementById("status")
+        .innerText =
+        "● NinjaTrader desconectado";
 
-        document.getElementById(
-            "connectionStatus"
-        ).style.color = "#ff6464";
+        document.getElementById("status")
+        .style.color =
+        "#ff6464";
 
     }
 
 }
 
 
-/*
-====================================================
- ACTUALIZAR INTERFAZ
-====================================================
-*/
-
-function updateInterface(data){
-
-    if(!data){
-        return;
-    }
-
-
-    if(data.symbol){
-
-        document.getElementById(
-            "symbol"
-        ).innerText = data.symbol;
-
-    }
-
-
-    if(data.last !== undefined){
-
-        const price = Number(data.last);
-
-        document.getElementById(
-            "price"
-        ).innerText = price.toFixed(1);
-
-        priceHistory.push(price);
-
-        if(priceHistory.length > maxPoints){
-
-            priceHistory.shift();
-
-        }
-
-        drawChart();
-
-        updateSignal();
-
-    }
-
-
-    if(data.bid !== undefined){
-
-        document.getElementById(
-            "bid"
-        ).innerText =
-            Number(data.bid).toFixed(1);
-
-    }
-
-
-    if(data.ask !== undefined){
-
-        document.getElementById(
-            "ask"
-        ).innerText =
-            Number(data.ask).toFixed(1);
-
-    }
-
-
-    if(data.volume !== undefined){
-
-        document.getElementById(
-            "volume"
-        ).innerText =
-            Number(data.volume).toLocaleString();
-
-    }
-
-
-    document.getElementById(
-        "priceStatus"
-    ).innerText =
-        "Datos en tiempo real desde NinjaTrader";
-
-}
-
-
-/*
-====================================================
- GRÁFICO
-====================================================
-*/
+/* =========================================
+   GRAFICO
+========================================= */
 
 function drawChart(){
 
     const canvas =
-        document.getElementById("chart");
+    document.getElementById("chart");
 
     const ctx =
-        canvas.getContext("2d");
+    canvas.getContext("2d");
 
     const width =
-        canvas.clientWidth;
+    canvas.clientWidth;
 
     const height =
-        canvas.clientHeight;
+    canvas.clientHeight;
 
-    const dpr =
-        window.devicePixelRatio || 1;
+    const ratio =
+    window.devicePixelRatio || 1;
 
     canvas.width =
-        width * dpr;
+    width * ratio;
 
     canvas.height =
-        height * dpr;
+    height * ratio;
 
-    ctx.scale(dpr,dpr);
+    ctx.scale(ratio,ratio);
 
     ctx.clearRect(
         0,
@@ -739,7 +558,7 @@ function drawChart(){
     );
 
 
-    if(priceHistory.length < 2){
+    if(prices.length < 2){
 
         return;
 
@@ -747,10 +566,10 @@ function drawChart(){
 
 
     let min =
-        Math.min(...priceHistory);
+    Math.min(...prices);
 
     let max =
-        Math.max(...priceHistory);
+    Math.max(...prices);
 
 
     if(max === min){
@@ -767,26 +586,24 @@ function drawChart(){
     ctx.beginPath();
 
 
-    priceHistory.forEach(
-        (price,index)=>{
+    prices.forEach(
+        (value,index)=>{
 
             const x =
-                padding +
-                (
-                    index /
-                    (priceHistory.length - 1)
-                ) *
-                (width - padding * 2);
+            padding +
+            index /
+            (prices.length - 1) *
+            (width - padding * 2);
 
 
             const y =
-                height -
-                padding -
-                (
-                    (price - min) /
-                    (max - min)
-                ) *
-                (height - padding * 2);
+            height -
+            padding -
+            (
+                (value - min) /
+                (max - min)
+            ) *
+            (height - padding * 2);
 
 
             if(index === 0){
@@ -805,69 +622,22 @@ function drawChart(){
 
 
     ctx.strokeStyle =
-        "#f5c542";
+    "#f5c542";
 
     ctx.lineWidth = 2;
 
     ctx.stroke();
 
-
-    /*
-    PRECIO ACTUAL
-    */
-
-    const last =
-        priceHistory[
-            priceHistory.length - 1
-        ];
-
-
-    const lastX =
-        width - padding;
-
-
-    const lastY =
-        height -
-        padding -
-        (
-            (last - min) /
-            (max - min)
-        ) *
-        (height - padding * 2);
-
-
-    ctx.beginPath();
-
-    ctx.arc(
-        lastX,
-        lastY,
-        4,
-        0,
-        Math.PI * 2
-    );
-
-    ctx.fillStyle =
-        "#ffffff";
-
-    ctx.fill();
-
 }
 
 
-/*
-====================================================
- SEÑAL BÁSICA
-====================================================
-*/
+/* =========================================
+   SEÑAL
+========================================= */
 
-function updateSignal(){
+function calculateSignal(){
 
-    if(priceHistory.length < 10){
-
-        document.getElementById(
-            "signal"
-        ).innerText =
-            "ESPERANDO DATOS";
+    if(prices.length < 10){
 
         return;
 
@@ -875,66 +645,63 @@ function updateSignal(){
 
 
     const recent =
-        priceHistory.slice(-5);
+    prices.slice(-5);
 
     const previous =
-        priceHistory.slice(-10,-5);
+    prices.slice(-10,-5);
 
 
-    const recentAvg =
-        recent.reduce(
-            (a,b)=>a+b,
-            0
-        ) / recent.length;
+    const recentAverage =
+    recent.reduce(
+        (a,b)=>a+b,
+        0
+    ) / recent.length;
 
 
-    const previousAvg =
-        previous.reduce(
-            (a,b)=>a+b,
-            0
-        ) / previous.length;
+    const previousAverage =
+    previous.reduce(
+        (a,b)=>a+b,
+        0
+    ) / previous.length;
 
 
     let signal =
-        "NEUTRAL";
+    "NEUTRAL";
 
 
-    if(recentAvg > previousAvg){
-
-        signal =
-            "ALCISTA";
-
-    }
-    else if(recentAvg < previousAvg){
+    if(recentAverage > previousAverage){
 
         signal =
-            "BAJISTA";
+        "ALCISTA";
 
     }
 
+    else if(recentAverage < previousAverage){
 
-    document.getElementById(
-        "signal"
-    ).innerText = signal;
+        signal =
+        "BAJISTA";
+
+    }
+
+
+    document.getElementById("signal")
+    .innerText =
+    signal;
 
 }
 
 
-/*
-====================================================
- CHAT CON GOLD AI
-====================================================
-*/
+/* =========================================
+   GOLD AI
+========================================= */
 
 async function askAI(){
 
     const input =
-        document.getElementById(
-            "question"
-        );
+    document.getElementById("question");
 
     const question =
-        input.value.trim();
+    input.value.trim();
 
 
     if(!question){
@@ -945,25 +712,17 @@ async function askAI(){
 
 
     const messages =
-        document.getElementById(
-            "messages"
-        );
+    document.getElementById("messages");
 
-
-    /*
-    MENSAJE USUARIO
-    */
 
     const userMessage =
-        document.createElement(
-            "div"
-        );
+    document.createElement("div");
 
     userMessage.className =
-        "message user";
+    "message user";
 
     userMessage.innerText =
-        question;
+    question;
 
     messages.appendChild(
         userMessage
@@ -973,20 +732,14 @@ async function askAI(){
     input.value = "";
 
 
-    /*
-    MENSAJE CARGANDO
-    */
-
     const aiMessage =
-        document.createElement(
-            "div"
-        );
+    document.createElement("div");
 
     aiMessage.className =
-        "message ai";
+    "message ai";
 
     aiMessage.innerText =
-        "Analizando oro, mercado y noticias...";
+    "🧠 Analizando oro y noticias...";
 
     messages.appendChild(
         aiMessage
@@ -994,120 +747,111 @@ async function askAI(){
 
 
     messages.scrollTop =
-        messages.scrollHeight;
+    messages.scrollHeight;
 
 
     try{
 
-        const marketData = {
+        const market = {
 
             symbol:
-                currentMarket?.symbol ||
-                "GC DEC26",
+            currentMarket?.symbol ||
+            "GC DEC26",
 
             last:
-                currentMarket?.last ||
-                null,
+            currentMarket?.last ||
+            null,
 
             bid:
-                currentMarket?.bid ||
-                null,
+            currentMarket?.bid ||
+            null,
 
             ask:
-                currentMarket?.ask ||
-                null,
+            currentMarket?.ask ||
+            null,
 
             volume:
-                currentMarket?.volume ||
-                null,
+            currentMarket?.volume ||
+            null,
 
             recentPrices:
-                priceHistory.slice(-30),
-
-            timestamp:
-                currentMarket?.timestamp ||
-                new Date().toISOString()
+            prices.slice(-30)
 
         };
 
 
         const response =
-            await fetch(
-                AI_URL,
-                {
+        await fetch(
+            AI_URL,
+            {
 
-                    method:"POST",
+                method:"POST",
 
-                    headers:{
-                        "Content-Type":
-                            "application/json"
-                    },
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
 
-                    body:
-                        JSON.stringify({
+                body:
+                JSON.stringify({
 
-                            question:
-                                question,
+                    question:
+                    question,
 
-                            market:
-                                JSON.stringify(
-                                    marketData,
-                                    null,
-                                    2
-                                )
+                    market:
+                    JSON.stringify(
+                        market,
+                        null,
+                        2
+                    )
 
-                        })
+                })
 
-                }
-            );
+            }
+        );
 
 
         const result =
-            await response.json();
+        await response.json();
 
 
         if(!response.ok){
 
             throw new Error(
                 result.error ||
-                "Error del servidor AI"
+                "Error del servidor"
             );
 
         }
 
 
         aiMessage.innerText =
-            result.answer ||
-            "La IA no devolvió respuesta.";
+        result.answer ||
+        "No hubo respuesta.";
 
 
     }
 
     catch(error){
 
-        console.error(
-            "AI ERROR:",
-            error
-        );
+        console.error(error);
 
         aiMessage.innerText =
-            "Error conectando con Gold AI: " +
-            error.message;
+        "❌ Error conectando con Gold AI: " +
+        error.message;
 
     }
 
 
     messages.scrollTop =
-        messages.scrollHeight;
+    messages.scrollHeight;
 
 }
 
 
-/*
-====================================================
- ENTER PARA ENVIAR
-====================================================
-*/
+/* =========================================
+   ENTER
+========================================= */
 
 document
 .getElementById("question")
@@ -1125,26 +869,16 @@ document
 );
 
 
-/*
-====================================================
- ACTUALIZAR MERCADO
-====================================================
-*/
+/* =========================================
+   INICIAR
+========================================= */
 
 updateMarket();
-
 
 setInterval(
     updateMarket,
     1000
 );
-
-
-/*
-====================================================
- REDIBUJAR AL CAMBIAR TAMAÑO
-====================================================
-*/
 
 window.addEventListener(
     "resize",
