@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,146 +5,500 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gold AI Trader</title>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-* {
-    box-sizing: border-box;
+:root{
+    --bg:#070b12;
+    --panel:#0d131d;
+    --panel2:#111925;
+    --border:#1d2938;
+    --text:#e8eef7;
+    --muted:#8190a5;
+    --green:#22c55e;
+    --red:#ef4444;
+    --yellow:#f59e0b;
+    --blue:#3b82f6;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #0b0f14;
-    color: #e8edf2;
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-header {
-    padding: 20px;
-    border-bottom: 1px solid #252c35;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial,Helvetica,sans-serif;
 }
 
-.logo {
-    font-size: 22px;
-    font-weight: bold;
+header{
+    height:64px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 24px;
+    background:#090e16;
+    position:sticky;
+    top:0;
+    z-index:20;
 }
 
-.status {
-    color: #35d07f;
-    font-size: 14px;
+.logo{
+    font-size:20px;
+    font-weight:800;
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 25px;
+.logo span{
+    color:#f5b942;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 20px;
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#8fa0b5;
+    font-size:13px;
 }
 
-.card {
-    background: #121820;
-    border: 1px solid #252c35;
-    border-radius: 12px;
-    padding: 20px;
+.dot{
+    width:8px;
+    height:8px;
+    background:var(--green);
+    border-radius:50%;
+    box-shadow:0 0 10px var(--green);
 }
 
-.price {
-    font-size: 42px;
-    font-weight: bold;
-    margin: 10px 0;
+.layout{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    min-height:calc(100vh - 64px);
 }
 
-.change {
-    color: #35d07f;
+.sidebar{
+    border-right:1px solid var(--border);
+    background:#090e16;
+    padding:20px 12px;
 }
 
-.signal {
-    text-align: center;
-    padding: 25px;
-    border-radius: 10px;
-    background: #18202a;
-    margin-top: 20px;
+.menu-title{
+    font-size:11px;
+    color:#607086;
+    text-transform:uppercase;
+    margin:10px 10px;
 }
 
-.signal-title {
-    font-size: 14px;
-    color: #8d99a6;
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
 }
 
-.signal-value {
-    font-size: 32px;
-    font-weight: bold;
-    margin-top: 8px;
+.nav button{
+    border:0;
+    background:transparent;
+    color:#8e9bae;
+    text-align:left;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
 }
 
-.waiting {
-    color: #f2c94c;
+.nav button:hover,
+.nav button.active{
+    background:#151e2b;
+    color:white;
 }
 
-.metrics {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 20px;
+.main{
+    padding:20px;
+    overflow:hidden;
 }
 
-.metric {
-    background: #0d131a;
-    padding: 15px;
-    border-radius: 8px;
+.top-grid{
+    display:grid;
+    grid-template-columns:1.8fr 1fr 1fr;
+    gap:14px;
 }
 
-.metric-label {
-    color: #8d99a6;
-    font-size: 13px;
+.card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px;
 }
 
-.metric-value {
-    font-size: 18px;
-    margin-top: 5px;
+.label{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:7px;
 }
 
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 8px;
-    background: #d6a84f;
-    color: #111;
-    font-weight: bold;
-    cursor: pointer;
+.big{
+    font-size:28px;
+    font-weight:800;
 }
 
-button:hover {
-    opacity: 0.9;
+.green{color:var(--green);}
+.red{color:var(--red);}
+.yellow{color:var(--yellow);}
+.blue{color:#60a5fa;}
+
+.market-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
+.market-name{
+    font-size:13px;
+    color:#91a0b3;
 }
 
-th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #252c35;
+.change{
+    font-size:13px;
+    margin-top:5px;
 }
 
-th {
-    color: #8d99a6;
+.dashboard{
+    display:grid;
+    grid-template-columns:minmax(0,2fr) minmax(300px,1fr);
+    gap:14px;
+    margin-top:14px;
 }
 
-@media (max-width: 800px) {
-    .grid {
-        grid-template-columns: 1fr;
+.chart-card{
+    min-height:520px;
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:12px;
+}
+
+.card-title{
+    font-size:16px;
+    font-weight:700;
+}
+
+.badge{
+    padding:6px 9px;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.badge.green{
+    background:rgba(34,197,94,.12);
+}
+
+.badge.red{
+    background:rgba(239,68,68,.12);
+}
+
+.badge.yellow{
+    background:rgba(245,158,11,.12);
+}
+
+.chart-wrap{
+    height:390px;
+}
+
+.ai-box{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.signal{
+    text-align:center;
+    padding:22px 10px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:#0a1018;
+}
+
+.signal-main{
+    font-size:34px;
+    font-weight:900;
+    margin-bottom:8px;
+}
+
+.signal-sub{
+    color:#8392a7;
+    font-size:12px;
+}
+
+.metrics{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.metric{
+    padding:11px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#0a1018;
+}
+
+.metric span{
+    display:block;
+    color:#708096;
+    font-size:11px;
+    margin-bottom:5px;
+}
+
+.metric strong{
+    font-size:15px;
+}
+
+.action-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.btn{
+    border:0;
+    padding:13px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:800;
+    color:white;
+}
+
+.buy{
+    background:#15803d;
+}
+
+.sell{
+    background:#b91c1c;
+}
+
+.btn:hover{
+    filter:brightness(1.15);
+}
+
+.section-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:14px;
+    margin-top:14px;
+}
+
+.news-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.news{
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+}
+
+.news:last-child{
+    border-bottom:0;
+}
+
+.news-title{
+    font-size:13px;
+    line-height:1.4;
+}
+
+.news-meta{
+    color:#68788d;
+    font-size:10px;
+    margin-top:5px;
+}
+
+.scanner{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.asset{
+    display:grid;
+    grid-template-columns:1fr auto auto;
+    gap:12px;
+    align-items:center;
+    padding:10px;
+    border-radius:8px;
+    background:#0a1018;
+    border:1px solid var(--border);
+}
+
+.asset-name{
+    font-weight:700;
+    font-size:13px;
+}
+
+.asset-type{
+    color:#68788d;
+    font-size:10px;
+}
+
+.score{
+    font-weight:800;
+}
+
+.chat{
+    margin-top:14px;
+}
+
+.chat-box{
+    height:330px;
+    display:flex;
+    flex-direction:column;
+}
+
+.messages{
+    flex:1;
+    overflow-y:auto;
+    padding:8px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.msg{
+    max-width:85%;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.45;
+}
+
+.ai-msg{
+    background:#131c29;
+    align-self:flex-start;
+}
+
+.user-msg{
+    background:#1d4ed8;
+    align-self:flex-end;
+}
+
+.chat-input{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.chat-input input{
+    flex:1;
+    background:#080d14;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:12px;
+    color:white;
+    outline:none;
+}
+
+.chat-input button{
+    background:#2563eb;
+    color:white;
+    border:0;
+    border-radius:8px;
+    padding:0 18px;
+    cursor:pointer;
+    font-weight:700;
+}
+
+.portfolio{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:14px;
+}
+
+.stat{
+    padding:14px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.stat .number{
+    font-size:20px;
+    font-weight:800;
+    margin-top:5px;
+}
+
+.history{
+    margin-top:14px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:11px 8px;
+    text-align:left;
+    border-bottom:1px solid var(--border);
+    font-size:12px;
+}
+
+th{
+    color:#697a91;
+    font-weight:500;
+}
+
+.footer{
+    text-align:center;
+    color:#4f6075;
+    font-size:10px;
+    padding:25px;
+}
+
+@media(max-width:1100px){
+    .top-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+
+    .section-grid{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:750px){
+    header{
+        padding:0 12px;
+    }
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        padding:10px;
+    }
+
+    .top-grid,
+    .section-grid,
+    .portfolio{
+        grid-template-columns:1fr;
+    }
+
+    .chart-wrap{
+        height:300px;
     }
 }
 </style>
@@ -154,218 +507,1052 @@ th {
 <body>
 
 <header>
-    <div class="logo">🥇 Gold AI Trader</div>
-    <div class="status">● SIMULATION</div>
+    <div class="logo">GOLD <span>AI</span> TRADER</div>
+
+    <div class="status">
+        <div class="dot"></div>
+        DEMO MODE
+    </div>
 </header>
 
-<div class="container">
+<div class="layout">
 
-    <div class="grid">
+<aside class="sidebar">
 
-        <div class="card">
-            <h2>Gold Futures — GC</h2>
+    <div class="menu-title">Terminal</div>
 
-            <div class="price" id="price">$4,420.00</div>
+    <div class="nav">
+        <button class="active">Dashboard</button>
+        <button>Gold / Futures</button>
+        <button>Stocks</button>
+        <button>Forex</button>
+        <button>Crypto</button>
+        <button>News</button>
+        <button>Macro</button>
+        <button>Scanner</button>
+        <button>Portfolio</button>
+        <button>AI Chat</button>
+    </div>
 
-            <div class="change" id="change">
-                +0.00%
+    <div class="menu-title">Account</div>
+
+    <div class="nav">
+        <button>Trading Simulator</button>
+        <button>Risk Management</button>
+        <button>Trade History</button>
+    </div>
+
+</aside>
+
+<main class="main">
+
+<!-- TOP MARKET CARDS -->
+
+<div class="top-grid">
+
+    <div class="card">
+        <div class="label">GOLD FUTURES · GC</div>
+
+        <div class="market-row">
+            <div>
+                <div class="big" id="goldPrice">4285.00</div>
+                <div class="change green" id="goldChange">+0.00%</div>
             </div>
 
-            <div class="signal">
-                <div class="signal-title">
-                    AI MARKET SIGNAL
-                </div>
-
-                <div class="signal-value waiting" id="signal">
-                    WAIT
-                </div>
-
-                <p id="reason">
-                    Analizando condiciones del mercado...
-                </p>
+            <div>
+                <div class="label">Market</div>
+                <strong id="marketStatus">OPEN</strong>
             </div>
+        </div>
+    </div>
 
-            <div class="metrics">
+    <div class="card">
+        <div class="label">SIMULATED BALANCE</div>
+        <div class="big">$<span id="balance">150000</span></div>
+        <div class="change green">+$0.00 today</div>
+    </div>
 
-                <div class="metric">
-                    <div class="metric-label">Tendencia 15m</div>
-                    <div class="metric-value" id="trend15">
-                        NEUTRAL
-                    </div>
-                </div>
+    <div class="card">
+        <div class="label">AI MARKET VIEW</div>
+        <div class="big yellow" id="mainSignal">WAIT</div>
+        <div class="change" id="confidence">Confidence: 61%</div>
+    </div>
 
-                <div class="metric">
-                    <div class="metric-label">Tendencia 5m</div>
-                    <div class="metric-value" id="trend5">
-                        NEUTRAL
-                    </div>
-                </div>
+</div>
 
-                <div class="metric">
-                    <div class="metric-label">RSI</div>
-                    <div class="metric-value" id="rsi">
-                        50
-                    </div>
-                </div>
 
-                <div class="metric">
-                    <div class="metric-label">ATR</div>
-                    <div class="metric-value" id="atr">
-                        0.00
-                    </div>
-                </div>
+<!-- MAIN DASHBOARD -->
 
+<div class="dashboard">
+
+    <div class="card chart-card">
+
+        <div class="card-header">
+            <div class="card-title">GC · Gold Futures</div>
+
+            <div>
+                <span class="badge green">5M</span>
+                <span class="badge">15M</span>
+                <span class="badge">1H</span>
             </div>
-
-            <button onclick="simulateSignal()">
-                SIMULAR ANÁLISIS
-            </button>
-
         </div>
 
-        <div class="card">
-
-            <h2>Cuenta</h2>
-
-            <div class="metric">
-                <div class="metric-label">
-                    Capital inicial
-                </div>
-
-                <div class="metric-value">
-                    $150,000
-                </div>
-            </div>
-
-            <div class="metric">
-                <div class="metric-label">
-                    Balance
-                </div>
-
-                <div class="metric-value" id="balance">
-                    $150,000
-                </div>
-            </div>
-
-            <div class="metric">
-                <div class="metric-label">
-                    P&L
-                </div>
-
-                <div class="metric-value" id="pnl">
-                    $0
-                </div>
-            </div>
-
-            <div class="metric">
-                <div class="metric-label">
-                    Posición
-                </div>
-
-                <div class="metric-value" id="position">
-                    FLAT
-                </div>
-            </div>
-
+        <div class="chart-wrap">
+            <canvas id="goldChart"></canvas>
         </div>
 
     </div>
 
-    <div class="card" style="margin-top:20px">
 
-        <h2>Historial de operaciones</h2>
+    <div class="card ai-box">
 
-        <table>
+        <div class="card-header">
+            <div class="card-title">AI Market Engine</div>
+            <div class="badge yellow">ANALYSIS</div>
+        </div>
 
-            <thead>
-                <tr>
-                    <th>Hora</th>
-                    <th>Dirección</th>
-                    <th>Entrada</th>
-                    <th>Salida</th>
-                    <th>P&L</th>
-                </tr>
-            </thead>
+        <div class="signal">
 
-            <tbody id="history">
+            <div class="signal-main yellow" id="signalText">
+                WAIT
+            </div>
 
-                <tr>
-                    <td colspan="5">
-                        Todavía no hay operaciones.
-                    </td>
-                </tr>
+            <div class="signal-sub">
+                Market conditions are being analyzed
+            </div>
 
-            </tbody>
+        </div>
 
-        </table>
+
+        <div class="metrics">
+
+            <div class="metric">
+                <span>Trend 5M</span>
+                <strong id="trend5">NEUTRAL</strong>
+            </div>
+
+            <div class="metric">
+                <span>Trend 15M</span>
+                <strong id="trend15">BULLISH</strong>
+            </div>
+
+            <div class="metric">
+                <span>RSI</span>
+                <strong id="rsi">52.4</strong>
+            </div>
+
+            <div class="metric">
+                <span>ATR</span>
+                <strong id="atr">8.7</strong>
+            </div>
+
+            <div class="metric">
+                <span>EMA 20</span>
+                <strong id="ema20">4283.4</strong>
+            </div>
+
+            <div class="metric">
+                <span>EMA 50</span>
+                <strong id="ema50">4281.8</strong>
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="label">AI SCENARIO</div>
+
+            <div id="scenario" style="font-size:13px;line-height:1.5;color:#9aa8ba;">
+                The system is monitoring trend, momentum,
+                volatility and market catalysts.
+            </div>
+
+        </div>
+
+
+        <div class="action-row">
+
+            <button class="btn buy" onclick="openTrade('LONG')">
+                BUY / LONG
+            </button>
+
+            <button class="btn sell" onclick="openTrade('SHORT')">
+                SELL / SHORT
+            </button>
+
+        </div>
 
     </div>
 
 </div>
 
+
+<!-- PORTFOLIO -->
+
+<div class="portfolio">
+
+    <div class="stat">
+        <div class="label">Equity</div>
+        <div class="number">$<span id="equity">150000</span></div>
+    </div>
+
+    <div class="stat">
+        <div class="label">Today's P&L</div>
+        <div class="number green" id="dailyPnL">$0</div>
+    </div>
+
+    <div class="stat">
+        <div class="label">Drawdown</div>
+        <div class="number" id="drawdown">$0</div>
+    </div>
+
+    <div class="stat">
+        <div class="label">Trades</div>
+        <div class="number" id="tradeCount">0</div>
+    </div>
+
+</div>
+
+
+<!-- NEWS / SCANNER / MACRO -->
+
+<div class="section-grid">
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-title">Market News</div>
+            <div class="badge blue">LIVE FEED</div>
+        </div>
+
+        <div class="news-list" id="newsList">
+
+            <div class="news">
+                <div class="news-title">
+                    Gold reacts to changes in US rates and dollar strength.
+                </div>
+                <div class="news-meta">
+                    DEMO NEWS · Macro
+                </div>
+            </div>
+
+            <div class="news">
+                <div class="news-title">
+                    Traders monitor inflation and central-bank expectations.
+                </div>
+                <div class="news-meta">
+                    DEMO NEWS · Economics
+                </div>
+            </div>
+
+            <div class="news">
+                <div class="news-title">
+                    Oil prices can influence inflation expectations and rates.
+                </div>
+                <div class="news-meta">
+                    DEMO NEWS · Commodities
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-title">Macro Monitor</div>
+        </div>
+
+        <div class="metrics">
+
+            <div class="metric">
+                <span>USD</span>
+                <strong id="usd">102.40</strong>
+            </div>
+
+            <div class="metric">
+                <span>US 10Y</span>
+                <strong id="yield10">4.18%</strong>
+            </div>
+
+            <div class="metric">
+                <span>FED EXPECTATIONS</span>
+                <strong id="fed">HAWKISH</strong>
+            </div>
+
+            <div class="metric">
+                <span>OIL</span>
+                <strong id="oil">$92.40</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-header">
+            <div class="card-title">Opportunity Scanner</div>
+        </div>
+
+        <div class="scanner">
+
+            <div class="asset">
+                <div>
+                    <div class="asset-name">Gold · GC</div>
+                    <div class="asset-type">COMMODITY</div>
+                </div>
+                <div class="score yellow">72</div>
+                <div class="green">+0.4%</div>
+            </div>
+
+            <div class="asset">
+                <div>
+                    <div class="asset-name">EUR/USD</div>
+                    <div class="asset-type">FOREX</div>
+                </div>
+                <div class="score">61</div>
+                <div class="red">-0.2%</div>
+            </div>
+
+            <div class="asset">
+                <div>
+                    <div class="asset-name">NVDA</div>
+                    <div class="asset-type">STOCK</div>
+                </div>
+                <div class="score green">78</div>
+                <div class="green">+1.2%</div>
+            </div>
+
+            <div class="asset">
+                <div>
+                    <div class="asset-name">BTC/USD</div>
+                    <div class="asset-type">CRYPTO</div>
+                </div>
+                <div class="score">57</div>
+                <div class="green">+0.6%</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- AI CHAT -->
+
+<div class="card chat">
+
+    <div class="card-header">
+
+        <div>
+            <div class="card-title">AI Financial Chat</div>
+            <div class="label">
+                Ask about markets, news, risk, gold, stocks or FX
+            </div>
+        </div>
+
+        <div class="badge blue">AI</div>
+
+    </div>
+
+
+    <div class="chat-box">
+
+        <div class="messages" id="messages">
+
+            <div class="msg ai-msg">
+                Hola. Soy el motor de análisis de Gold AI Trader.
+                Puedes preguntarme por oro, acciones, divisas,
+                macroeconomía, noticias o gestión del riesgo.
+            </div>
+
+        </div>
+
+
+        <div class="chat-input">
+
+            <input
+                id="chatInput"
+                type="text"
+                placeholder="Ej: ¿Qué está moviendo el oro?"
+                onkeydown="handleChat(event)"
+            >
+
+            <button onclick="sendMessage()">
+                ENVIAR
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TRADE HISTORY -->
+
+<div class="card history">
+
+    <div class="card-header">
+        <div class="card-title">Trade History</div>
+    </div>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Asset</th>
+                <th>Side</th>
+                <th>Entry</th>
+                <th>SL</th>
+                <th>TP</th>
+                <th>P&L</th>
+            </tr>
+        </thead>
+
+        <tbody id="tradeHistory">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<div class="footer">
+    GOLD AI TRADER · SIMULATION MODE · NOT FINANCIAL ADVICE
+</div>
+
+</main>
+</div>
+
+
 <script>
 
+/* ============================================================
+   GOLD AI TRADER
+   DEMO ENGINE
+   ============================================================ */
+
+let goldPrice = 4285.00;
 let balance = 150000;
+let startingBalance = 150000;
+let trades = [];
+let chart;
+let priceHistory = [];
 
-function simulateSignal() {
 
-    const signals = ["WAIT", "LONG", "SHORT"];
+// Generate initial prices
 
-    const signal =
-        signals[Math.floor(Math.random() * signals.length)];
+for(let i = 0; i < 80; i++){
 
-    const rsi =
-        Math.floor(35 + Math.random() * 30);
+    let variation = (Math.random() - 0.48) * 8;
 
-    const atr =
-        (8 + Math.random() * 15).toFixed(2);
+    goldPrice += variation;
 
-    const trend15 =
-        Math.random() > 0.5 ? "BULLISH" : "BEARISH";
+    priceHistory.push(Number(goldPrice.toFixed(2)));
+}
 
-    const trend5 =
-        Math.random() > 0.5 ? "BULLISH" : "BEARISH";
 
-    document.getElementById("signal").textContent =
-        signal;
+// Chart
+
+const ctx = document.getElementById("goldChart");
+
+chart = new Chart(ctx, {
+
+    type:"line",
+
+    data:{
+        labels:priceHistory.map((_,i)=>i),
+
+        datasets:[{
+            label:"GC",
+            data:priceHistory,
+            borderWidth:2,
+            pointRadius:0,
+            tension:.25
+        }]
+    },
+
+    options:{
+        responsive:true,
+        maintainAspectRatio:false,
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+
+        scales:{
+
+            x:{
+                display:false
+            },
+
+            y:{
+                grid:{
+                    color:"#17202d"
+                },
+
+                ticks:{
+                    color:"#718096"
+                }
+            }
+        }
+    }
+
+});
+
+
+// Calculate EMA
+
+function calculateEMA(data, period){
+
+    if(data.length < period){
+        return data[data.length-1];
+    }
+
+    let multiplier = 2/(period+1);
+
+    let ema = data[0];
+
+    for(let i=1;i<data.length;i++){
+
+        ema =
+            (data[i]-ema)*multiplier
+            + ema;
+
+    }
+
+    return ema;
+}
+
+
+// Calculate RSI
+
+function calculateRSI(data){
+
+    if(data.length < 15){
+        return 50;
+    }
+
+    let gains = 0;
+    let losses = 0;
+
+    for(let i=data.length-14;i<data.length;i++){
+
+        let change = data[i]-data[i-1];
+
+        if(change >= 0){
+            gains += change;
+        }else{
+            losses += Math.abs(change);
+        }
+    }
+
+    if(losses === 0){
+        return 100;
+    }
+
+    let rs = gains/losses;
+
+    return 100-(100/(1+rs));
+}
+
+
+// AI market engine
+
+function analyzeMarket(){
+
+    let ema20 = calculateEMA(priceHistory.slice(-40),20);
+    let ema50 = calculateEMA(priceHistory,50);
+
+    let rsi = calculateRSI(priceHistory);
+
+    let trend5 = "NEUTRAL";
+    let trend15 = "NEUTRAL";
+
+    if(goldPrice > ema20){
+        trend5 = "BULLISH";
+    }else{
+        trend5 = "BEARISH";
+    }
+
+    if(ema20 > ema50){
+        trend15 = "BULLISH";
+    }else{
+        trend15 = "BEARISH";
+    }
+
+    let signal = "WAIT";
+
+    if(
+        goldPrice > ema20 &&
+        ema20 > ema50 &&
+        rsi > 52 &&
+        rsi < 72
+    ){
+        signal = "LONG";
+    }
+
+    if(
+        goldPrice < ema20 &&
+        ema20 < ema50 &&
+        rsi < 48 &&
+        rsi > 28
+    ){
+        signal = "SHORT";
+    }
+
+    let confidence = 55;
+
+    if(signal === "LONG"){
+        confidence = Math.round(
+            60 + Math.random()*25
+        );
+    }
+
+    if(signal === "SHORT"){
+        confidence = Math.round(
+            60 + Math.random()*25
+        );
+    }
+
+    document.getElementById("ema20").textContent =
+        ema20.toFixed(2);
+
+    document.getElementById("ema50").textContent =
+        ema50.toFixed(2);
 
     document.getElementById("rsi").textContent =
-        rsi;
-
-    document.getElementById("atr").textContent =
-        atr;
-
-    document.getElementById("trend15").textContent =
-        trend15;
+        rsi.toFixed(1);
 
     document.getElementById("trend5").textContent =
         trend5;
 
-    if (signal === "LONG") {
+    document.getElementById("trend15").textContent =
+        trend15;
 
-        document.getElementById("reason").textContent =
-            "Tendencia alcista + momentum favorable.";
+    document.getElementById("mainSignal").textContent =
+        signal;
 
-        document.getElementById("position").textContent =
-            "LONG";
+    document.getElementById("signalText").textContent =
+        signal;
 
-    } else if (signal === "SHORT") {
+    document.getElementById("confidence").textContent =
+        "Confidence: " + confidence + "%";
 
-        document.getElementById("reason").textContent =
-            "Tendencia bajista + momentum favorable.";
 
-        document.getElementById("position").textContent =
-            "SHORT";
+    let signalColor = "yellow";
 
-    } else {
-
-        document.getElementById("reason").textContent =
-            "No hay suficientes condiciones para entrar.";
-
-        document.getElementById("position").textContent =
-            "FLAT";
+    if(signal === "LONG"){
+        signalColor = "green";
     }
+
+    if(signal === "SHORT"){
+        signalColor = "red";
+    }
+
+    document.getElementById("mainSignal").className =
+        "big " + signalColor;
+
+    document.getElementById("signalText").className =
+        "signal-main " + signalColor;
+
+
+    let scenario = "";
+
+    if(signal === "LONG"){
+
+        scenario =
+        "Momentum is currently positive. Price is above the short-term EMA structure. A long setup would require confirmation and controlled risk.";
+
+    }else if(signal === "SHORT"){
+
+        scenario =
+        "Momentum is currently negative. Price is below the EMA structure. A short setup would require confirmation and controlled risk.";
+
+    }else{
+
+        scenario =
+        "The market is mixed. Trend and momentum are not aligned strongly enough for a high-confidence simulated setup.";
+
+    }
+
+    document.getElementById("scenario").textContent =
+        scenario;
+
 }
+
+
+// Price simulation
+
+function updateMarket(){
+
+    let movement =
+        (Math.random()-0.49)*7;
+
+    goldPrice += movement;
+
+    goldPrice =
+        Number(goldPrice.toFixed(2));
+
+    priceHistory.push(goldPrice);
+
+    if(priceHistory.length > 150){
+        priceHistory.shift();
+    }
+
+
+    document.getElementById("goldPrice").textContent =
+        goldPrice.toFixed(2);
+
+
+    chart.data.labels =
+        priceHistory.map((_,i)=>i);
+
+    chart.data.datasets[0].data =
+        priceHistory;
+
+    chart.update("none");
+
+
+    analyzeMarket();
+
+}
+
+
+// Open simulated trade
+
+function openTrade(side){
+
+    let entry = goldPrice;
+
+    let stopDistance = 10;
+
+    let targetDistance = 20;
+
+    let stop;
+    let target;
+
+    if(side === "LONG"){
+
+        stop = entry-stopDistance;
+        target = entry+targetDistance;
+
+    }else{
+
+        stop = entry+stopDistance;
+        target = entry-targetDistance;
+
+    }
+
+
+    let trade = {
+
+        time:new Date().toLocaleTimeString(),
+
+        asset:"GC",
+
+        side:side,
+
+        entry:entry,
+
+        sl:stop,
+
+        tp:target,
+
+        pnl:0
+
+    };
+
+
+    trades.unshift(trade);
+
+    renderTrades();
+
+
+    addMessage(
+        "ai",
+        side === "LONG"
+        ?
+        "Simulación LONG abierta en " + entry.toFixed(2) +
+        ". SL: " + stop.toFixed(2) +
+        ". TP: " + target.toFixed(2) + "."
+        :
+        "Simulación SHORT abierta en " + entry.toFixed(2) +
+        ". SL: " + stop.toFixed(2) +
+        ". TP: " + target.toFixed(2) + "."
+    );
+
+}
+
+
+// Render trades
+
+function renderTrades(){
+
+    let tbody =
+        document.getElementById("tradeHistory");
+
+    tbody.innerHTML = "";
+
+    trades.forEach(trade=>{
+
+        let row =
+        document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>${trade.time}</td>
+
+            <td>${trade.asset}</td>
+
+            <td class="${
+                trade.side === "LONG"
+                ? "green"
+                : "red"
+            }">
+                ${trade.side}
+            </td>
+
+            <td>${trade.entry.toFixed(2)}</td>
+
+            <td>${trade.sl.toFixed(2)}</td>
+
+            <td>${trade.tp.toFixed(2)}</td>
+
+            <td>$${trade.pnl.toFixed(2)}</td>
+
+        `;
+
+        tbody.appendChild(row);
+
+    });
+
+
+    document.getElementById("tradeCount").textContent =
+        trades.length;
+
+}
+
+
+// AI chat
+
+function handleChat(event){
+
+    if(event.key === "Enter"){
+        sendMessage();
+    }
+
+}
+
+
+function sendMessage(){
+
+    let input =
+        document.getElementById("chatInput");
+
+    let text =
+        input.value.trim();
+
+    if(!text){
+        return;
+    }
+
+    addMessage("user",text);
+
+    input.value = "";
+
+
+    setTimeout(()=>{
+
+        let response =
+            generateAIResponse(text);
+
+        addMessage("ai",response);
+
+    },500);
+
+}
+
+
+function addMessage(type,text){
+
+    let container =
+        document.getElementById("messages");
+
+    let div =
+        document.createElement("div");
+
+    div.className =
+        type === "user"
+        ? "msg user-msg"
+        : "msg ai-msg";
+
+    div.textContent = text;
+
+    container.appendChild(div);
+
+    container.scrollTop =
+        container.scrollHeight;
+
+}
+
+
+// Demo AI response engine
+
+function generateAIResponse(question){
+
+    let q =
+        question.toLowerCase();
+
+    if(
+        q.includes("oro") ||
+        q.includes("gold") ||
+        q.includes("gc")
+    ){
+
+        return `
+Gold GC está en ${goldPrice.toFixed(2)}.
+El motor está evaluando EMA20, EMA50, RSI,
+volatilidad y estructura de tendencia.
+
+Actualmente la señal es ${
+            document.getElementById("mainSignal").textContent
+        }.
+
+En la versión conectada a datos reales,
+aquí también analizaremos noticias,
+calendario macroeconómico y flujo de mercado.
+        `.trim();
+
+    }
+
+
+    if(
+        q.includes("acción") ||
+        q.includes("acciones") ||
+        q.includes("stock")
+    ){
+
+        return `
+El scanner está diseñado para analizar acciones
+por tendencia, momentum, volumen, volatilidad,
+catalizadores y noticias.
+
+En la siguiente fase podremos conectar datos
+reales de mercado y resultados empresariales.
+        `.trim();
+
+    }
+
+
+    if(
+        q.includes("forex") ||
+        q.includes("divisa") ||
+        q.includes("eur")
+    ){
+
+        return `
+El módulo FX analizará pares de divisas,
+diferenciales de tipos, dólar, volatilidad,
+macro y noticias relevantes.
+        `.trim();
+
+    }
+
+
+    if(
+        q.includes("noticia") ||
+        q.includes("news")
+    ){
+
+        return `
+El módulo de noticias actualmente usa información
+de demostración.
+
+La arquitectura está preparada para conectar
+fuentes reales de noticias y después hacer que
+el motor relacione cada noticia con los activos
+afectados.
+        `.trim();
+
+    }
+
+
+    if(
+        q.includes("comprar") ||
+        q.includes("entrar") ||
+        q.includes("long") ||
+        q.includes("short")
+    ){
+
+        return `
+El sistema no debería basarse únicamente en una
+señal. La decisión simulada debe considerar
+tendencia, momentum, volatilidad, noticias,
+catalizadores y riesgo antes de abrir una posición.
+        `.trim();
+
+    }
+
+
+    return `
+Entiendo la pregunta.
+
+En la versión completa podré combinar:
+mercado + indicadores + noticias + macro +
+calendario + eventos empresariales + riesgo.
+
+Ahora mismo este terminal está funcionando
+en modo DEMO.
+    `.trim();
+
+}
+
+
+// Initial setup
+
+analyzeMarket();
+
+
+// Update market every 2 seconds
+
+setInterval(updateMarket,2000);
+
+
+// Demo macro movement
+
+setInterval(()=>{
+
+    let usd =
+        102.4 + (Math.random()-.5)*.15;
+
+    let yield10 =
+        4.18 + (Math.random()-.5)*.04;
+
+    let oil =
+        92.4 + (Math.random()-.5)*.5;
+
+    document.getElementById("usd").textContent =
+        usd.toFixed(2);
+
+    document.getElementById("yield10").textContent =
+        yield10.toFixed(2)+"%";
+
+    document.getElementById("oil").textContent =
+        "$"+oil.toFixed(2);
+
+},3000);
 
 </script>
 
