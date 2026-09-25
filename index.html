@@ -1,1 +1,373 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold AI Trader</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f14;
+    color: #e8edf2;
+}
+
+header {
+    padding: 20px;
+    border-bottom: 1px solid #252c35;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.status {
+    color: #35d07f;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 25px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
+
+.card {
+    background: #121820;
+    border: 1px solid #252c35;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.price {
+    font-size: 42px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.change {
+    color: #35d07f;
+}
+
+.signal {
+    text-align: center;
+    padding: 25px;
+    border-radius: 10px;
+    background: #18202a;
+    margin-top: 20px;
+}
+
+.signal-title {
+    font-size: 14px;
+    color: #8d99a6;
+}
+
+.signal-value {
+    font-size: 32px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.waiting {
+    color: #f2c94c;
+}
+
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.metric {
+    background: #0d131a;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.metric-label {
+    color: #8d99a6;
+    font-size: 13px;
+}
+
+.metric-value {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #d6a84f;
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #252c35;
+}
+
+th {
+    color: #8d99a6;
+}
+
+@media (max-width: 800px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🥇 Gold AI Trader</div>
+    <div class="status">● SIMULATION</div>
+</header>
+
+<div class="container">
+
+    <div class="grid">
+
+        <div class="card">
+            <h2>Gold Futures — GC</h2>
+
+            <div class="price" id="price">$4,420.00</div>
+
+            <div class="change" id="change">
+                +0.00%
+            </div>
+
+            <div class="signal">
+                <div class="signal-title">
+                    AI MARKET SIGNAL
+                </div>
+
+                <div class="signal-value waiting" id="signal">
+                    WAIT
+                </div>
+
+                <p id="reason">
+                    Analizando condiciones del mercado...
+                </p>
+            </div>
+
+            <div class="metrics">
+
+                <div class="metric">
+                    <div class="metric-label">Tendencia 15m</div>
+                    <div class="metric-value" id="trend15">
+                        NEUTRAL
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">Tendencia 5m</div>
+                    <div class="metric-value" id="trend5">
+                        NEUTRAL
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">RSI</div>
+                    <div class="metric-value" id="rsi">
+                        50
+                    </div>
+                </div>
+
+                <div class="metric">
+                    <div class="metric-label">ATR</div>
+                    <div class="metric-value" id="atr">
+                        0.00
+                    </div>
+                </div>
+
+            </div>
+
+            <button onclick="simulateSignal()">
+                SIMULAR ANÁLISIS
+            </button>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Cuenta</h2>
+
+            <div class="metric">
+                <div class="metric-label">
+                    Capital inicial
+                </div>
+
+                <div class="metric-value">
+                    $150,000
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">
+                    Balance
+                </div>
+
+                <div class="metric-value" id="balance">
+                    $150,000
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">
+                    P&L
+                </div>
+
+                <div class="metric-value" id="pnl">
+                    $0
+                </div>
+            </div>
+
+            <div class="metric">
+                <div class="metric-label">
+                    Posición
+                </div>
+
+                <div class="metric-value" id="position">
+                    FLAT
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card" style="margin-top:20px">
+
+        <h2>Historial de operaciones</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Dirección</th>
+                    <th>Entrada</th>
+                    <th>Salida</th>
+                    <th>P&L</th>
+                </tr>
+            </thead>
+
+            <tbody id="history">
+
+                <tr>
+                    <td colspan="5">
+                        Todavía no hay operaciones.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+let balance = 150000;
+
+function simulateSignal() {
+
+    const signals = ["WAIT", "LONG", "SHORT"];
+
+    const signal =
+        signals[Math.floor(Math.random() * signals.length)];
+
+    const rsi =
+        Math.floor(35 + Math.random() * 30);
+
+    const atr =
+        (8 + Math.random() * 15).toFixed(2);
+
+    const trend15 =
+        Math.random() > 0.5 ? "BULLISH" : "BEARISH";
+
+    const trend5 =
+        Math.random() > 0.5 ? "BULLISH" : "BEARISH";
+
+    document.getElementById("signal").textContent =
+        signal;
+
+    document.getElementById("rsi").textContent =
+        rsi;
+
+    document.getElementById("atr").textContent =
+        atr;
+
+    document.getElementById("trend15").textContent =
+        trend15;
+
+    document.getElementById("trend5").textContent =
+        trend5;
+
+    if (signal === "LONG") {
+
+        document.getElementById("reason").textContent =
+            "Tendencia alcista + momentum favorable.";
+
+        document.getElementById("position").textContent =
+            "LONG";
+
+    } else if (signal === "SHORT") {
+
+        document.getElementById("reason").textContent =
+            "Tendencia bajista + momentum favorable.";
+
+        document.getElementById("position").textContent =
+            "SHORT";
+
+    } else {
+
+        document.getElementById("reason").textContent =
+            "No hay suficientes condiciones para entrar.";
+
+        document.getElementById("position").textContent =
+            "FLAT";
+    }
+}
+
+</script>
+
+</body>
+</html>
