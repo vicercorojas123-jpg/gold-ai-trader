@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -11,173 +11,155 @@
 
 body{
     margin:0;
-    background:#070b12;
-    color:#f4f7fb;
     font-family:Arial,Helvetica,sans-serif;
+    background:#090b10;
+    color:#f5f5f5;
 }
 
 .container{
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
+    width:min(1100px,94%);
+    margin:0 auto;
+    padding:24px 0 50px;
 }
 
 header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:20px;
-    margin-bottom:20px;
+    gap:15px;
+    margin-bottom:24px;
 }
 
-h1{
-    margin:0;
-    font-size:30px;
+.logo{
+    font-size:25px;
+    font-weight:800;
 }
 
-.subtitle{
-    color:#8d99aa;
-    margin-top:5px;
+.logo span{
+    color:#d8aa45;
 }
 
 .status{
-    padding:9px 14px;
+    padding:8px 12px;
     border-radius:20px;
-    background:#122018;
-    color:#59e391;
+    background:#171b22;
     font-size:13px;
-    white-space:nowrap;
+}
+
+.card{
+    background:#11151c;
+    border:1px solid #252b35;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:18px;
 }
 
 .grid{
     display:grid;
-    grid-template-columns:2fr 1fr;
-    gap:18px;
-}
-
-.card{
-    background:#0d131d;
-    border:1px solid #1d2735;
-    border-radius:16px;
-    padding:18px;
-}
-
-.price{
-    font-size:44px;
-    font-weight:bold;
-    margin:8px 0;
-}
-
-.price-label{
-    color:#8995a7;
-    font-size:13px;
-}
-
-.market-row{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:15px;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
 
 .metric{
-    background:#080e16;
-    border-radius:10px;
-    padding:12px;
+    background:#171b22;
+    border-radius:12px;
+    padding:15px;
 }
 
-.metric-label{
-    color:#778397;
-    font-size:12px;
-}
-
-.metric-value{
-    margin-top:5px;
-    font-weight:bold;
-}
-
-canvas{
-    width:100%;
-    height:280px;
+.metric small{
     display:block;
-    margin-top:15px;
+    color:#8d96a5;
+    margin-bottom:7px;
 }
+
+.metric strong{
+    font-size:22px;
+}
+
+.price{
+    font-size:34px!important;
+}
+
+.green{color:#46d17a}
+.red{color:#ff6262}
+.muted{color:#8d96a5}
 
 .signal{
-    padding:16px;
+    padding:18px;
     border-radius:12px;
-    background:#111a26;
+    background:#171b22;
     margin-top:15px;
 }
 
 .signal-title{
-    color:#8995a7;
-    font-size:12px;
-    margin-bottom:6px;
+    font-size:13px;
+    color:#8d96a5;
+    margin-bottom:7px;
 }
 
 .signal-value{
-    font-size:24px;
-    font-weight:bold;
+    font-size:22px;
+    font-weight:700;
 }
 
 .chat{
-    display:flex;
-    flex-direction:column;
-    height:100%;
-}
-
-.messages{
-    flex:1;
-    min-height:280px;
+    min-height:300px;
     max-height:500px;
-    overflow:auto;
-    background:#080e16;
+    overflow-y:auto;
+    background:#0b0e13;
     border-radius:12px;
-    padding:12px;
+    padding:15px;
+    margin-bottom:14px;
 }
 
 .message{
-    padding:12px;
-    border-radius:10px;
+    padding:12px 14px;
+    border-radius:12px;
     margin-bottom:10px;
     line-height:1.5;
     white-space:pre-wrap;
 }
 
 .user{
-    background:#162235;
+    background:#242a34;
+    margin-left:12%;
 }
 
 .ai{
-    background:#111a26;
+    background:#151a22;
+    border-left:3px solid #d8aa45;
+    margin-right:8%;
 }
 
 .input-row{
     display:flex;
-    gap:8px;
-    margin-top:10px;
+    gap:10px;
 }
 
 input{
     flex:1;
     min-width:0;
-    background:#080e16;
-    border:1px solid #263245;
-    color:white;
+    padding:14px;
     border-radius:10px;
-    padding:13px;
+    border:1px solid #303744;
+    background:#0b0e13;
+    color:white;
+    font-size:16px;
     outline:none;
+}
+
+input:focus{
+    border-color:#d8aa45;
 }
 
 button{
     border:0;
     border-radius:10px;
-    padding:13px 18px;
-    cursor:pointer;
-    background:#d9a441;
+    padding:0 22px;
+    background:#d8aa45;
     color:#111;
-    font-weight:bold;
+    font-weight:800;
+    cursor:pointer;
 }
 
 button:disabled{
@@ -185,61 +167,76 @@ button:disabled{
     cursor:not-allowed;
 }
 
+.chart-wrap{
+    position:relative;
+    width:100%;
+    height:280px;
+}
+
+canvas{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
 .macro{
     display:grid;
-    gap:10px;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
 }
 
 .macro-item{
-    display:flex;
-    justify-content:space-between;
-    padding:12px;
-    background:#080e16;
-    border-radius:10px;
+    background:#171b22;
+    border-radius:12px;
+    padding:14px;
 }
 
-.small{
-    color:#778397;
-    font-size:12px;
+.macro-item small{
+    display:block;
+    color:#8d96a5;
+    margin-bottom:6px;
 }
 
-.account{
-    margin-top:18px;
-}
-
-.account-value{
-    font-size:28px;
-    font-weight:bold;
-}
-
-.error{
-    color:#ff6b6b;
+.notice{
+    color:#8d96a5;
     font-size:13px;
-    margin-top:10px;
+    line-height:1.5;
 }
 
-@media(max-width:850px){
-    .grid{
-        grid-template-columns:1fr;
+@media(max-width:800px){
+    .grid,
+    .macro{
+        grid-template-columns:repeat(2,1fr);
     }
 }
 
-@media(max-width:600px){
-    .market-row{
-        grid-template-columns:1fr;
+@media(max-width:520px){
+    .grid,
+    .macro{
+        grid-template-columns:1fr 1fr;
     }
 
     header{
-        flex-direction:column;
         align-items:flex-start;
     }
 
-    .price{
-        font-size:36px;
+    .input-row{
+        flex-direction:column;
+    }
+
+    button{
+        min-height:48px;
+    }
+
+    .user{
+        margin-left:0;
+    }
+
+    .ai{
+        margin-right:0;
     }
 }
 </style>
-
 </head>
 
 <body>
@@ -247,143 +244,157 @@ button:disabled{
 <div class="container">
 
 <header>
-    <div>
-        <h1>🥇 Gold AI Advisor</h1>
-        <div class="subtitle">Gold Futures • NinjaTrader • OpenAI</div>
-    </div>
-
-```
-<div class="status" id="connectionStatus">
-    Conectando...
-</div>
-```
-
+    <div class="logo">🥇 <span>Gold AI</span> Trader</div>
+    <div id="connectionStatus" class="status">Conectando...</div>
 </header>
-
-<div class="grid">
-
-<div>
 
 <div class="card">
 
-<div class="price-label">GC Futures</div>
-<div class="price" id="price">---</div>
+    <h2>Gold Futures</h2>
 
-<div class="small" id="symbol">---</div>
+    <div class="grid">
 
-<div class="market-row">
+        <div class="metric">
+            <small>GC Futures</small>
+            <strong id="gcPrice" class="price">---</strong>
+        </div>
 
-<div class="metric">
-<div class="metric-label">Bid</div>
-<div class="metric-value" id="bid">---</div>
-</div>
+        <div class="metric">
+            <small>Bid</small>
+            <strong id="gcBid">---</strong>
+        </div>
 
-<div class="metric">
-<div class="metric-label">Ask</div>
-<div class="metric-value" id="ask">---</div>
-</div>
+        <div class="metric">
+            <small>Ask</small>
+            <strong id="gcAsk">---</strong>
+        </div>
 
-<div class="metric">
-<div class="metric-label">Volume</div>
-<div class="metric-value" id="volume">---</div>
-</div>
+        <div class="metric">
+            <small>Volume</small>
+            <strong id="gcVolume">---</strong>
+        </div>
 
-</div>
+    </div>
 
-<canvas id="chart"></canvas>
-
-<div class="signal">
-<div class="signal-title">GOLD AI SIGNAL</div>
-<div class="signal-value" id="signal">Esperando datos...</div>
-<div class="small" id="signalText"></div>
-</div>
-
-<div class="account">
-
-<div class="small">Cuenta simulada</div>
-<div class="account-value">$150,000</div>
-
-<div class="small">
-Capital de simulación para gestión de riesgo.
-</div>
+    <div class="signal">
+        <div class="signal-title">GOLD AI SIGNAL</div>
+        <div id="signal" class="signal-value muted">
+            Esperando datos...
+        </div>
+    </div>
 
 </div>
 
-</div>
+<div class="card">
 
-<div class="card" style="margin-top:18px">
+    <h2>Precio de GC</h2>
 
-<h3>Macro / Mercado</h3>
+    <div class="chart-wrap">
+        <canvas id="priceChart"></canvas>
+    </div>
 
-<div class="macro">
-
-<div class="macro-item">
-<span>DXY</span>
-<span id="dxy">Pendiente</span>
-</div>
-
-<div class="macro-item">
-<span>US Treasury</span>
-<span id="yield">Pendiente</span>
-</div>
-
-<div class="macro-item">
-<span>Federal Reserve</span>
-<span id="fed">Pendiente</span>
-</div>
-
-<div class="macro-item">
-<span>Noticias</span>
-<span id="news">Pendiente</span>
-</div>
+    <div id="chartInfo" class="notice">
+        Esperando datos de NinjaTrader...
+    </div>
 
 </div>
 
-</div>
+<div class="card">
+
+    <h2>Macro / Mercado</h2>
+
+    <div class="macro">
+
+        <div class="macro-item">
+            <small>DXY</small>
+            <strong>En análisis</strong>
+        </div>
+
+        <div class="macro-item">
+            <small>Treasury Yields</small>
+            <strong>En análisis</strong>
+        </div>
+
+        <div class="macro-item">
+            <small>Federal Reserve</small>
+            <strong>En análisis</strong>
+        </div>
+
+        <div class="macro-item">
+            <small>Geopolítica</small>
+            <strong>En análisis</strong>
+        </div>
+
+    </div>
 
 </div>
 
-<div class="card chat">
+<div class="card">
 
-<h3>Gold AI</h3>
+    <h2>🤖 Gold AI Advisor</h2>
 
-<div class="messages" id="messages">
+    <div id="chat" class="chat">
 
-<div class="message ai">
-Hola. Soy Gold AI.
+        <div class="message ai">
+            Soy Gold AI. Puedo analizar el oro, GC Futures, noticias,
+            DXY, bonos, Fed, inflación, empleo, China y geopolítica.
 
-Estoy conectado al mercado de Gold Futures.
+            Pregúntame qué está pasando con el oro o si quieres analizar
+            una posible entrada.
+        </div>
 
-Puedes preguntarme:
-• ¿Qué está pasando con el oro?
-• ¿Compro ahora?
-• ¿Por qué está cayendo?
-• ¿Cómo afecta Trump al oro?
-• ¿Qué niveles vigilar?
+    </div>
 
-</div>
+    <div class="input-row">
 
-</div>
+        <input
+            id="question"
+            type="text"
+            placeholder="Pregunta a Gold AI..."
+            autocomplete="off"
+        >
 
-<div class="input-row">
+        <button id="sendButton">
+            Enviar
+        </button>
 
-<input
-id="question"
-type="text"
-placeholder="Pregunta sobre el oro..."
-autocomplete="off"
-/>
-
-<button id="send">
-Enviar
-</button>
+    </div>
 
 </div>
 
-<div class="error" id="error"></div>
+<div class="card">
+
+    <h2>Cuenta simulada</h2>
+
+    <div class="grid">
+
+        <div class="metric">
+            <small>Capital</small>
+            <strong>$150,000</strong>
+        </div>
+
+        <div class="metric">
+            <small>Profit</small>
+            <strong id="simProfit" class="green">$0</strong>
+        </div>
+
+        <div class="metric">
+            <small>Posición</small>
+            <strong id="simPosition">Flat</strong>
+        </div>
+
+        <div class="metric">
+            <small>Estado</small>
+            <strong>SIM</strong>
+        </div>
+
+    </div>
 
 </div>
 
+<div class="notice">
+    Gold AI utiliza datos locales de NinjaTrader. Las respuestas de la IA
+    son análisis informativos y no garantizan resultados de trading.
 </div>
 
 </div>
@@ -391,94 +402,118 @@ Enviar
 <script>
 
 const GC_URL = "http://localhost:8787/gc";
-const AI_URL = "http://localhost:8794/ai";
+const AI_URL = "http://localhost:8795/ai";
 
-const priceEl=document.getElementById("price");
-const bidEl=document.getElementById("bid");
-const askEl=document.getElementById("ask");
-const volumeEl=document.getElementById("volume");
-const symbolEl=document.getElementById("symbol");
+const gcPrice = document.getElementById("gcPrice");
+const gcBid = document.getElementById("gcBid");
+const gcAsk = document.getElementById("gcAsk");
+const gcVolume = document.getElementById("gcVolume");
+const signal = document.getElementById("signal");
+const connectionStatus = document.getElementById("connectionStatus");
+const chartInfo = document.getElementById("chartInfo");
 
-const statusEl=document.getElementById("connectionStatus");
-const signalEl=document.getElementById("signal");
-const signalTextEl=document.getElementById("signalText");
+const chat = document.getElementById("chat");
+const question = document.getElementById("question");
+const sendButton = document.getElementById("sendButton");
 
-const messagesEl=document.getElementById("messages");
-const questionEl=document.getElementById("question");
-const sendBtn=document.getElementById("send");
-const errorEl=document.getElementById("error");
+const canvas = document.getElementById("priceChart");
+const ctx = canvas.getContext("2d");
 
-const canvas=document.getElementById("chart");
-const ctx=canvas.getContext("2d");
+let prices = [];
+let currentMarket = null;
 
-let prices=[];
+function addMessage(text, type){
 
-function addMessage(type,text){
+    const div = document.createElement("div");
 
-    const div=document.createElement("div");
+    div.className = "message " + type;
+    div.textContent = text;
 
-    div.className="message "+type;
-    div.textContent=text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
 
-    messagesEl.appendChild(div);
+    return div;
+}
 
-    messagesEl.scrollTop=messagesEl.scrollHeight;
+function formatNumber(value){
+
+    if(value === null || value === undefined || isNaN(value)){
+        return "---";
+    }
+
+    return Number(value).toLocaleString("en-US", {
+        minimumFractionDigits:1,
+        maximumFractionDigits:1
+    });
 }
 
 function resizeCanvas(){
 
-    const rect=canvas.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
 
-    canvas.width=Math.max(300,rect.width*window.devicePixelRatio);
-    canvas.height=Math.max(200,rect.height*window.devicePixelRatio);
+    canvas.width = Math.max(300, Math.floor(rect.width * devicePixelRatio));
+    canvas.height = Math.max(200, Math.floor(rect.height * devicePixelRatio));
 
-    ctx.setTransform(
-        window.devicePixelRatio,
-        0,
-        0,
-        window.devicePixelRatio,
-        0,
-        0
-    );
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
 
     drawChart();
 }
 
 function drawChart(){
 
-    const w=canvas.clientWidth;
-    const h=canvas.clientHeight;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
 
-    ctx.clearRect(0,0,w,h);
+    ctx.clearRect(0,0,width,height);
 
-    if(prices.length<2){
-        ctx.fillStyle="#667085";
-        ctx.font="14px Arial";
+    if(prices.length < 2){
+
+        ctx.fillStyle = "#7f8794";
+        ctx.font = "14px Arial";
         ctx.fillText("Esperando datos de GC...",20,30);
+
         return;
     }
 
-    let min=Math.min(...prices);
-    let max=Math.max(...prices);
+    let min = Math.min(...prices);
+    let max = Math.max(...prices);
 
-    if(max===min){
-        max+=1;
-        min-=1;
+    if(min === max){
+        min -= 1;
+        max += 1;
     }
 
-    const pad=20;
+    const padding = 25;
+
+    ctx.strokeStyle = "#252b35";
+    ctx.lineWidth = 1;
+
+    for(let i=0;i<4;i++){
+
+        const y = padding +
+            ((height-padding*2)/3)*i;
+
+        ctx.beginPath();
+        ctx.moveTo(padding,y);
+        ctx.lineTo(width-padding,y);
+        ctx.stroke();
+    }
 
     ctx.beginPath();
 
-    prices.forEach((p,i)=>{
+    prices.forEach((price,index)=>{
 
-        const x=pad+(i/(prices.length-1))*(w-pad*2);
+        const x =
+            padding +
+            (index/(prices.length-1)) *
+            (width-padding*2);
 
-        const y=
-            h-pad-
-            ((p-min)/(max-min))*(h-pad*2);
+        const y =
+            height-padding -
+            ((price-min)/(max-min)) *
+            (height-padding*2);
 
-        if(i===0){
+        if(index===0){
             ctx.moveTo(x,y);
         }else{
             ctx.lineTo(x,y);
@@ -486,192 +521,200 @@ function drawChart(){
 
     });
 
-    ctx.strokeStyle="#d9a441";
-    ctx.lineWidth=2;
+    ctx.strokeStyle = "#d8aa45";
+    ctx.lineWidth = 2;
     ctx.stroke();
 }
 
 function updateSignal(){
 
-    if(prices.length<5){
-        signalEl.textContent="Esperando datos...";
-        signalTextEl.textContent="";
+    if(prices.length < 3){
+
+        signal.textContent = "Esperando más datos...";
+        signal.className = "signal-value muted";
         return;
     }
 
-    const recent=prices.slice(-5);
+    const last = prices[prices.length-1];
+    const previous = prices[prices.length-2];
 
-    const first=recent[0];
-    const last=recent[recent.length-1];
+    const change = last - previous;
 
-    const change=last-first;
+    if(change > 0){
 
-    if(change>0.8){
+        signal.textContent = "Momentum alcista";
+        signal.className = "signal-value green";
 
-        signalEl.textContent="MOMENTUM ALCISTA";
-        signalTextEl.textContent=
-            "El precio está mostrando impulso positivo en los últimos datos.";
+    }else if(change < 0){
 
-    }else if(change<-0.8){
-
-        signalEl.textContent="MOMENTUM BAJISTA";
-        signalTextEl.textContent=
-            "El precio está mostrando presión vendedora reciente.";
+        signal.textContent = "Momentum bajista";
+        signal.className = "signal-value red";
 
     }else{
 
-        signalEl.textContent="LATERAL";
-        signalTextEl.textContent=
-            "El precio está relativamente estable en el corto plazo.";
+        signal.textContent = "Mercado lateral";
+        signal.className = "signal-value muted";
     }
 }
 
-async function updateMarket(){
+async function updateGC(){
 
     try{
 
-        const response=await fetch(GC_URL,{
-            cache:"no-store"
-        });
+        const response = await fetch(
+            GC_URL + "?t=" + Date.now(),
+            {
+                cache:"no-store"
+            }
+        );
 
         if(!response.ok){
-            throw new Error("GC HTTP "+response.status);
+            throw new Error("GC HTTP " + response.status);
         }
 
-        const data=await response.json();
+        const data = await response.json();
 
-        priceEl.textContent=data.last ?? "---";
-        bidEl.textContent=data.bid ?? "---";
-        askEl.textContent=data.ask ?? "---";
-        volumeEl.textContent=data.volume ?? "---";
-        symbolEl.textContent=data.symbol ?? "---";
+        currentMarket = data;
 
-        const price=Number(data.last);
+        const last = Number(data.last);
 
-        if(Number.isFinite(price)){
+        gcPrice.textContent = formatNumber(data.last);
+        gcBid.textContent = formatNumber(data.bid);
+        gcAsk.textContent = formatNumber(data.ask);
+        gcVolume.textContent = formatNumber(data.volume);
 
-            prices.push(price);
+        if(!isNaN(last)){
 
-            if(prices.length>100){
+            prices.push(last);
+
+            if(prices.length > 80){
                 prices.shift();
             }
 
             drawChart();
             updateSignal();
+
+            chartInfo.textContent =
+                "Último dato recibido: " +
+                new Date(data.timestamp).toLocaleString();
         }
 
-        statusEl.textContent="GC conectado";
-        statusEl.style.color="#59e391";
+        connectionStatus.textContent = "GC conectado";
+        connectionStatus.className = "status green";
 
-        errorEl.textContent="";
+    }catch(error){
 
-    }
-    catch(error){
+        connectionStatus.textContent = "GC desconectado";
+        connectionStatus.className = "status red";
 
-        statusEl.textContent="GC desconectado";
-        statusEl.style.color="#ff6b6b";
-
-        errorEl.textContent=
+        chartInfo.textContent =
             "No se pudo conectar con NinjaTrader. Comprueba el servidor 8787.";
-
     }
 }
 
 async function askAI(){
 
-    const question=questionEl.value.trim();
+    const text = question.value.trim();
 
-    if(!question){
+    if(!text){
         return;
     }
 
-    addMessage("user",question);
+    addMessage(text,"user");
 
-    questionEl.value="";
-    sendBtn.disabled=true;
+    question.value = "";
+    sendButton.disabled = true;
+    sendButton.textContent = "Pensando...";
 
-    errorEl.textContent="";
+    const loading = addMessage("Gold AI está analizando...","ai");
 
-    const market={
-        symbol:symbolEl.textContent,
-        last:priceEl.textContent,
-        bid:bidEl.textContent,
-        ask:askEl.textContent,
-        volume:volumeEl.textContent
-    };
-
-    const thinking=document.createElement("div");
-
-    thinking.className="message ai";
-    thinking.textContent="Analizando el mercado...";
-
-    messagesEl.appendChild(thinking);
-    messagesEl.scrollTop=messagesEl.scrollHeight;
+    const marketData = currentMarket
+        ? JSON.stringify(currentMarket)
+        : "Sin datos actuales de NinjaTrader. El mercado puede estar cerrado.";
 
     try{
 
-        const response=await fetch(AI_URL,{
+        const response = await fetch(AI_URL,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
-                question:question,
-                market:JSON.stringify(market)
+                question:text,
+                market:marketData
             })
         });
 
+        const raw = await response.text();
+
         if(!response.ok){
 
-            const text=await response.text();
+            let errorMessage = raw;
+
+            try{
+                const errorJson = JSON.parse(raw);
+
+                if(errorJson.error){
+                    errorMessage = errorJson.error;
+                }
+            }catch{}
+
+            throw new Error(errorMessage || "Error del servidor AI");
+        }
+
+        let data;
+
+        try{
+            data = JSON.parse(raw);
+        }catch{
 
             throw new Error(
-                "Servidor Gold AI HTTP "+
-                response.status+
-                " "+text
+                "El servidor AI devolvió una respuesta que no es JSON."
             );
         }
 
-        const data=await response.json();
-
-        thinking.remove();
+        loading.remove();
 
         if(data.answer){
 
-            addMessage("ai",data.answer);
+            addMessage(data.answer,"ai");
+
+        }else if(data.error){
+
+            addMessage(
+                "Error de Gold AI: " + data.error,
+                "ai"
+            );
 
         }else{
 
             addMessage(
-                "ai",
-                "Gold AI no devolvió una respuesta."
+                "El servidor respondió, pero no devolvió una respuesta de la IA.",
+                "ai"
             );
         }
 
+    }catch(error){
+
+        loading.remove();
+
+        addMessage(
+            "No pude conectar con Gold AI.\n\n" +
+            "Error: " + error.message,
+            "ai"
+        );
     }
-    catch(error){
 
-        thinking.remove();
-
-        console.error(error);
-
-        errorEl.textContent=
-            "No pude conectar con Gold AI. Comprueba que el servidor de Gold AI esté ejecutándose en el puerto 8794.";
-
-    }
-    finally{
-
-        sendBtn.disabled=false;
-        questionEl.focus();
-
-    }
+    sendButton.disabled = false;
+    sendButton.textContent = "Enviar";
+    question.focus();
 }
 
-sendBtn.addEventListener("click",askAI);
+sendButton.addEventListener("click",askAI);
 
-questionEl.addEventListener("keydown",function(event){
+question.addEventListener("keydown",function(event){
 
-    if(event.key==="Enter"){
+    if(event.key === "Enter"){
         event.preventDefault();
         askAI();
     }
@@ -682,11 +725,12 @@ window.addEventListener("resize",resizeCanvas);
 
 resizeCanvas();
 
-updateMarket();
+updateGC();
 
-setInterval(updateMarket,1000);
+setInterval(updateGC,2000);
 
 </script>
 
 </body>
 </html>
+```
